@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>美多商城-商品评价</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="js/vue-2.5.16.js"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到美多商城!</div>
+			<div class="fr">
+				<div class="login_info fl">
+					欢迎您：<em>张 山</em>
+				</div>
+				<div class="login_btn fl">
+					<a href="login.html">登录</a>
+					<span>|</span>
+					<a href="register.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="user_center_info.html">用户中心</a>
+					<span>|</span>
+					<a href="cart.html">我的购物车</a>
+					<span>|</span>
+					<a href="user_center_order.html">我的订单</a>
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="images/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;商品评价</div>
+		<div class="search_con fr mt40">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>		
+	</div>
+
+	<div class="judge_con">
+        <div class="judge_goods fl">     
+            <ul>
+                <li>
+                    <a href="#"><img src="images/goods/goods001.jpg"></a>
+                    <h4><a href="#">360手机 N6 Pro 全网通 6GB+128GB 极夜黑</a></h4>
+                    <div class="prize">￥3.90</div>
+                </li>
+            </ul> 
+        </div>
+        <div class="judge_goods_input fr">
+            <div class="judge_item">
+                <label>商品满意度</label>
+                <div class="stars fl">
+                    <a @mouseover="on_stars_mouseover(1)" @mouseout="on_stars_mouseout()" @click="on_stars_click(1)" class="star_off" :class="score>=1?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(2)" @mouseout="on_stars_mouseout()" @click="on_stars_click(2)" class="star_off" :class="score>=2?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(3)" @mouseout="on_stars_mouseout()" @click="on_stars_click(3)" class="star_off" :class="score>=3?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(4)" @mouseout="on_stars_mouseout()" @click="on_stars_click(4)" class="star_off" :class="score>=4?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(5)" @mouseout="on_stars_mouseout()" @click="on_stars_click(5)" class="star_off" :class="score>=5?'light':''"></a>
+                </div>
+				<div class="score">{{display_score}}分</div>
+            </div>
+            <div class="judge_item">
+                <label>发表评价</label>
+                <textarea class="judge_area"></textarea>
+            </div>
+            <div class="judge_item">
+                <input type="input" value="提 交" class="judge_sub">
+                <input type="checkbox" class="no_name"> 匿名评价
+            </div>
+        </div>
+    </div>
+	
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	</div>
+	<script type="text/javascript" src="/js/goods_judge.js"></script>
+</body>
+</html>
