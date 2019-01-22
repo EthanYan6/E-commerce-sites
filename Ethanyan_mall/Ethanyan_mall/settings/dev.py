@@ -131,3 +131,30 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# 设置Django框架的缓存位置（如果不做设置，缓存默认是服务器内存)
+# 此处是要把Django框架的缓存改为redis
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # 设置redis数据库地址
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "session": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # 设置redis数据库地址
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+# 设置将Django框架的session存储到缓存中，上面已经把Django框架的缓存改为了redis
+# 所以session就存储到了redis中
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# 设置session存储到缓存空间的名称
+SESSION_CACHE_ALIAS = "session"
+
+
