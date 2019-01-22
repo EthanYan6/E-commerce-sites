@@ -204,3 +204,6 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'Ethanyan_mall.utils.exceptions.exception_handler',
 }
 
+# 我们自定义的用户模型类还不能直接被Django的认证系统所识别，需要在配置文件中告知Django认证系统使用我们自定义的模型类。
+# AUTH_USER_MODEL = '子应用.模型类'
+AUTH_USER_MODEL = 'users.User'
