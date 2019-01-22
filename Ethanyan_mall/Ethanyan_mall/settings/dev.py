@@ -29,7 +29,7 @@ SECRET_KEY = 'jl#33@sr^=!p(s@46b2&k4kost(@!k-#qtnjo$%ixenxlwb9i2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.meiduo.site', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # 'Ethanyan_mall.apps.users.apps.UsersConfig',
     'users.apps.UsersConfig',
     'rest_framework',
+    'verifications.apps.VerificationsConfig'
 ]
 
 MIDDLEWARE = [
