@@ -199,3 +199,8 @@ LOGGING = {
     }
 }
 
+REST_FRAMEWORK = {
+    # 异常处理
+    'EXCEPTION_HANDLER': 'Ethanyan_mall.utils.exceptions.exception_handler',
+}
+
