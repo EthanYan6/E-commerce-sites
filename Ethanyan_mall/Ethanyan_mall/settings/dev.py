@@ -152,7 +152,7 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    "verify_code": {
+    "verify_codes": {
         "BACKEND": "django_redis.cache.RedisCache",
         # 设置redis数据库地址
         "LOCATION": "redis://127.0.0.1:6379/2",
