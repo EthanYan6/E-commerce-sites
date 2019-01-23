@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    # 以后将安装的包放在上面，应用的包放在下面
     # 'Ethanyan_mall.apps.users.apps.UsersConfig',
     'users.apps.UsersConfig',
-    'rest_framework',
     'verifications.apps.VerificationsConfig'
 ]
 
