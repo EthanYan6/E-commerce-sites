@@ -7,7 +7,7 @@ SEND_SMS_TEMP_ID = 1
 
 import logging
 logger = logging.getLogger('django')
-@celery_app.task('send_sms_code')
+@celery_app.task(name='send_sms_code')
 def send_sms_code(mobile,sms_code,expires):
     """
     发送短信验证码
