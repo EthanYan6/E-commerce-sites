@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
-
+# 语言时区本地化
 LANGUAGE_CODE = 'zh-Hans'
 
 TIME_ZONE = 'Asia/Shanghai'
@@ -159,7 +159,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 # 设置session存储到缓存空间的名称
 SESSION_CACHE_ALIAS = "session"
 
-
+# django框架的日志存储设置
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
@@ -186,9 +186,11 @@ LOGGING = {
         'file': {  # 向文件中输出日志
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
+            # 此处的BASE_DIR指的是内层的Ethanyan_mall的地址
             'filename': os.path.join(os.path.dirname(BASE_DIR), "logs/meiduo.log"),  # 日志文件的位置
             'maxBytes': 300 * 1024 * 1024,
             'backupCount': 10,
+            # 打印日志的格式，在上面定义了。找对应的名称查看
             'formatter': 'verbose'
         },
     },
@@ -200,9 +202,16 @@ LOGGING = {
         },
     }
 }
+# 打印日志
+import logging
+# 获取日志器
+# logger = logging.getLogger('django')
+# 调用日志器的方法进行对应处理
+# logger.error('Error Message')
+# logger.debug('Debug Message')
 
 REST_FRAMEWORK = {
-    # 异常处理
+    # 指定DRF框架异常处理的函数
     'EXCEPTION_HANDLER': 'Ethanyan_mall.utils.exceptions.exception_handler',
 }
 

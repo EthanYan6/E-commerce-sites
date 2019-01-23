@@ -20,6 +20,7 @@ def exception_handler(exc, context):
     response = drf_exception_handler(exc,context)
 
     if not response:
+        # 获取视图对象
         view = context['view']
         if isinstance(exc,DatabaseError) or isinstance(exc,RedisError):
             # 数据库异常的补充
