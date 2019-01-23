@@ -1,29 +1,25 @@
-from django.db import DatabaseError
-from django.http import HttpResponse
-from django.shortcuts import render
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 # Create your views here.
+from users.models import User
 
-# # 测试session数据库配置
-# # /set_session、
-# def set_session(request):
-#     #设置session
-#     request.session['name'] = 'Ethanyan'
-#     request.session['work'] = 'Coder'
-#     return HttpResponse('set session...')
-#
-# # /get_session
-# def get_session(request):
-#     # 获取session信息
-#     name = request.session.get('name')
-#     work = request.session.get('work')
-#     return HttpResponse('name:%s -- work:%s'%(name,work))
-#
-# # 自定义异常处理测试
-# # GET /goods/
-# class GoodsView(APIView):
-#     def get(self,request):
-#         # 抛出数据库异常
-#         raise DatabaseError
-#         return Response({'message':'OK'})
+# GET /usernames/(?P<username>\w{5,20})/count/
+class UsernameCountView(APIView):
+    def get(self,request,username):
+        """
+        获取用户名数量
+        1.根据用户名查询数据库，获取查询结果数量
+        2.返回用户名数量
+        :param request:
+        :param username:
+        :return:
+        """
+        # 1.根据用户名查询数据库，获取查询结果数量
+        count = User.objects.filter(username=username).count()
+        # 2.返回用户名数量
+        res_data = {
+            "username":username,
+            "count":count
+        }
+        return Response(res_data)
