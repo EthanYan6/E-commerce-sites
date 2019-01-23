@@ -217,7 +217,7 @@ LOGGING = {
 # 打印日志
 import logging
 # 获取日志器
-logger = logging.getLogger('django')
+# logger = logging.getLogger('django')
 # 调用日志器的方法进行对应处理
 # logger.error('Error Message')
 # logger.debug('Debug Message')
