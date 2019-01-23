@@ -34,7 +34,7 @@ class SMSCodeView(APIView):
             return Response({'message':'您点击过于频繁了，休息一会吧...'},status=status.HTTP_403_FORBIDDEN)
         # 1.随机生成6位的数字作为短信验证码
         sms_code = '%06d' % random.randint(0,999999)
-        logger.error("短信验证码是 = %s"%sms_code)
+        logger.info("短信验证码是 = %s"%sms_code)
         # 2.在redis中存储短信验证码内容，以'sms_<mobile>'为key，以验证码的内容为value
         # redis_conn = get_redis_connection('verify_codes')
 

@@ -215,12 +215,15 @@ LOGGING = {
     }
 }
 # 打印日志
-import logging
+# import logging
 # 获取日志器
 # logger = logging.getLogger('django')
 # 调用日志器的方法进行对应处理
-# logger.error('Error Message')
 # logger.debug('Debug Message')
+# logger.info('info Message')
+# logger.error('Error Message')
+# logger.warning('warning Message')
+# logger.fatal('fatal Message')
 
 REST_FRAMEWORK = {
     # 指定DRF框架异常处理的函数
