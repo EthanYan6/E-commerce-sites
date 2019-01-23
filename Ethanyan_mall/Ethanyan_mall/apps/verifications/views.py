@@ -40,8 +40,18 @@ class SMSCodeView(APIView):
 
         # redis_conn.set('<key>','<value>','<expires>')
         # redis_conn.setex('<key>','<expires>','<value>')
-        redis_conn.setex('sms_%s' % mobile,constants.SMS_CODE_REDIS_EXPIRES, sms_code)
-        redis_conn.setex('send_flag_%s' % mobile,constants.SEND_SMS_CODE_INTERVAL,1)
+        # redis_conn.setex('sms_%s' % mobile,constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+        # redis_conn.setex('send_flag_%s' % mobile,constants.SEND_SMS_CODE_INTERVAL,1)
+
+        # 创建redis管道对象
+        pl = redis_conn.pipeline()
+
+        # 向redis管道中添加命令
+        pl.setex('sms_%s' % mobile,constants.SMS_CODE_REDIS_EXPIRES,sms_code)
+        pl.setex('send_flag_%s' % mobile,constants.SEND_SMS_CODE_INTERVAL, 1)
+
+        # 一次性执行管道中的所有命令
+        pl.execute()
         # 3.使用云通讯给mobile发送短信
         expires = constants.SMS_CODE_REDIS_EXPIRES // 60
         # try:
