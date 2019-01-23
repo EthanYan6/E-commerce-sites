@@ -151,8 +151,20 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
+    },
+    "verify_code": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # 设置redis数据库地址
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
+# from redis import StrictRedis
+# StrictRedis(host='127.0.0.1',port=6379,db=2)
+# from django_redis import get_redis_connection
+# redis_conn = get_redis_connection('verify_code') # StrictRedis对象
 # 设置将Django框架的session存储到缓存中，上面已经把Django框架的缓存改为了redis
 # 所以session就存储到了redis中
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"

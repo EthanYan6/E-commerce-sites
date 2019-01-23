@@ -2,3 +2,7 @@
 username:admin
 password:123456abc
 email:admin@ethanyan.com
+
+# otherthings
+后端访问域名api.Ethanyan.site
+前端访问www.Ethanyan.site
