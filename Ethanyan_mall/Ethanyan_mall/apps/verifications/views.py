@@ -1,15 +1,14 @@
+import logging
 import random
+
 from django_redis import get_redis_connection
-from django.shortcuts import render
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from Ethanyan_mall.libs.yuntongxun.sms import CCP
+
+
 from verifications import constants
 
-# Create your views here.
-# 获取日志器
-import logging
 logger = logging.getLogger('django')
 
 # GET /sms_codes/(?P<mobile>1[3-9]\d{9})/
@@ -54,14 +53,8 @@ class SMSCodeView(APIView):
         pl.execute()
         # 3.使用云通讯给mobile发送短信
         expires = constants.SMS_CODE_REDIS_EXPIRES // 60
-        # try:
-        #     res = CCP().send_template_sms(mobile, [sms_code, expires], constants.SEND_SMS_TEMP_ID)
-        # except Exception as e:
-        #     logger.error(e)
-        #     return Response({'message':'验证码发送异常'},status = status.HTTP_503_SERVICE_UNAVAILABLE)
-        # if res != 0:
-        #     # 短信发送失败
-        #     return Response({'message':'验证码发送失败了'},status = status.HTTP_503_SERVICE_UNAVAILABLE)
-
+        # 创建一个进程调用发送短信的函数
+        from celery_tasks.sms.tasks import send_sms_code
+        send_sms_code.delay(mobile,sms_code,expires)
         # 4.返回应答，短信发送成功
         return Response({'message':'OK'})
