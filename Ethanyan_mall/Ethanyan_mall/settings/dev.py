@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     # 以后将安装的包放在上面，应用的包放在下面
     # 'Ethanyan_mall.apps.users.apps.UsersConfig',
     'users.apps.UsersConfig',
-    'verifications.apps.VerificationsConfig'
+    'verifications.apps.VerificationsConfig',
+    'oauth.apps.OauthConfig',
 ]
 
 MIDDLEWARE = [
