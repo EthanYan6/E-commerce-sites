@@ -1,61 +1,65 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>美多商城-登录</title>
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>闫氏商城-登录</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript" src="js/host.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
 </head>
 <body>
-	<div class="login_top clearfix">
-		<a href="index.html" class="login_logo"><img src="images/logo02.png"></a>	
-	</div>
-	<div class="login_form_bg">
-		<div class="login_form_wrap clearfix">
-			<div class="login_banner fl"></div>
-			<div class="slogan fl">商品美 · 种类多 · 欢迎光临</div>
-			<div class="login_form fr">
-				<div class="login_title clearfix">
-					<a href="javascript:;" class="cur">账户登录</a>
-				</div>
-				<div class="form_con">
-					<div class="form_input cur">
-						<form>
-							<input type="text" name="username" class="name_input" placeholder="请输入用户名">
-							<div class="user_error">输入错误</div>
-							<input type="password" name="pwd" class="pass_input" placeholder="请输入密码">
-							<div class="pwd_error">输入错误</div>
-							<div class="more_input clearfix">
-								<input type="checkbox" name="">
-								<label>记住登录</label>
-							</div>
-							<input type="submit" name="" value="登 录" class="input_submit">
-						</form>
-					</div>
-				</div>
-				<div class="third_party">
-					<a href="#" class="qq_login">QQ</a>
-					<a href="#" class="weixin_login">微信</a>
-					<a href="/register.html" class="register_btn">立即注册</a>
-				</div>
+    <div class="login_top clearfix">
+        <a href="index.html" class="login_logo"><img src="images/logo02.png"></a>
+    </div>
+    <div class="login_form_bg" id='app'>
+        <div class="login_form_wrap clearfix">
+            <div class="login_banner fl"></div>
+            <div class="slogan fl">商品美 · 种类多 · 欢迎光临</div>
+            <div class="login_form fr">
+                <div class="login_title clearfix">
+                    <a href="javascript:;" class="cur">账户登录</a>
+                </div>
+                <div class="form_con">
+                    <div class="form_input cur">
+                        <form id="login-form" @submit.prevent="on_submit">
+                            <input type="text" v-model="username" @blur="check_username" name="" class="name_input" placeholder="请输入用户名或手机号">
+                            <div v-show="error_username" class="user_error" v-cloak>请填写用户名或手机号</div>
+                            <input type="password" v-model="password" @blur="check_pwd" name="pwd" class="pass_input" placeholder="请输入密码">
+                            <div v-show="error_pwd" class="pwd_error" v-cloak>{{ error_pwd_message }}</div>
+                            <div class="more_input clearfix">
+                                <input type="checkbox" v-model="remember">
+                                <label>记住登录</label>
+                                <a href="/find_password.html">忘记密码</a>
+                            </div>
+                            <input type="submit" name="" value="登 录" class="input_submit">
+                        </form>
+                    </div>
+                </div>
+                <div class="third_party">
+                    <a @click="qq_login" class="qq_login">QQ</a>
+                    <a href="#" class="weixin_login">微信</a>
+                    <a href="/register.html" class="register_btn">立即注册</a>
+                </div>
 
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 
-	<div class="footer no-mp">
-		<div class="foot_link">
-			<a href="#">关于我们</a>
-			<span>|</span>
-			<a href="#">联系我们</a>
-			<span>|</span>
-			<a href="#">招聘人才</a>
-			<span>|</span>
-			<a href="#">友情链接</a>		
-		</div>
-		<p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
-		<p>电话：010-****888    京ICP备*******8号</p>
-	</div>
-	
+    <div class="footer no-mp">
+        <div class="foot_link">
+            <a href="#">关于我们</a>
+            <span>|</span>
+            <a href="#">联系我们</a>
+            <span>|</span>
+            <a href="#">招聘人才</a>
+            <span>|</span>
+            <a href="#">友情链接</a>
+        </div>
+        <p>CopyRight © 2016 北京闫氏集团 All Rights Reserved</p>
+        <p>电话：010-****888    京ICP备*******8号</p>
+    </div>
+    <script type="text/javascript" src="js/login.js"></script>
 </body>
 </html>
