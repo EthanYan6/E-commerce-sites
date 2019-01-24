@@ -167,6 +167,7 @@ var vm = new Vue({
             this.check_sms_code();
             this.check_allow();
 
+            // 访问后端注册用户信息保存API
             if(this.error_name == false && this.error_password == false && this.error_check_password == false
                 && this.error_phone == false && this.error_sms_code == false && this.error_allow == false) {
                 axios.post(this.host + '/users/', {

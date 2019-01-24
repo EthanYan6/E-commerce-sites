@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+import datetime
 import os
 import sys
 
@@ -230,6 +230,19 @@ LOGGING = {
 REST_FRAMEWORK = {
     # 指定DRF框架异常处理的函数
     'EXCEPTION_HANDLER': 'Ethanyan_mall.utils.exceptions.exception_handler',
+    # 认证设置
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 引入JWT认证机制，之后客户端请求服务器时，如果传递jwt token
+        # 此认证机制会自动校验jwt token的有效性，如果无效直接返回401(未认证)
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+# JWT扩展配置
+JWT_AUTH = {
+    #　设置JWT的有效时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
 # 我们自定义的用户模型类还不能直接被Django的认证系统所识别，需要在配置文件中告知Django认证系统使用我们自定义的模型类。
