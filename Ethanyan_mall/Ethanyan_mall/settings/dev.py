@@ -259,3 +259,7 @@ CORS_ORIGIN_WHITELIST = (
     'www.ethanyan.site:8080',
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
+
+
+# 只等django认证系统的后端类
+AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileAuthBackend']
