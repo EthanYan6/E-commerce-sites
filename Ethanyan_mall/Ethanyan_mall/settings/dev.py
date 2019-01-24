@@ -243,6 +243,9 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     #　设置JWT的有效时间
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    # 指定jwt扩展登录视图响应数据函数
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'users.utils.jwt_response_payload_handler'
 }
 
 # 我们自定义的用户模型类还不能直接被Django的认证系统所识别，需要在配置文件中告知Django认证系统使用我们自定义的模型类。
