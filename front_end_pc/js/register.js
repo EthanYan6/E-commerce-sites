@@ -180,7 +180,18 @@ var vm = new Vue({
                     }, {
                         responseType: 'json'
                     })
+
                     .then(response => {
+                        // 保存用户相关数据
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        // b保存jwt token
+                        localStorage.token = response.data.token;
+                        // 保存用户名
+                        localStorage.username = response.data.username;
+                        // 保存用户id
+                        localStorage.user_id = response.data.id;
+                        // 页面跳转
                         location.href = '/index.html';
                     })
                     .catch(error=> {
