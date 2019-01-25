@@ -64,10 +64,12 @@ class UserSerializer(serializers.ModelSerializer):
         # 判断手机短信验证码
         redis_conn = get_redis_connection('verify_codes')
         mobile = attrs['mobile']
-        # bytes数据
+        # 从redis中获取真实的验证码内容，是bytes数据
         real_sms_code = redis_conn.get('sms_%s'%mobile)
+
         if real_sms_code is None:
             raise serializers.ValidationError('短信验证码无效，请检查..')
+
         # 对比一下短信验证码，str格式
         if attrs['sms_code'] != real_sms_code.decode():
             raise serializers.ValidationError('再看看您的手机，验证码输错了哦...')
