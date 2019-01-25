@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>美多商城-绑定用户</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript" src="js/host.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div v-if="is_show_waiting" class="pass_change_finish">请稍后...</div>
+        <div v-else>
+            <div class="register_con">
+                <div class="l_con fl">
+                    <a class="reg_logo"><img src="images/logo.png"></a>
+                    <div class="reg_slogan">商品美 · 种类多 · 欢迎光临</div>
+                    <div class="reg_banner"></div>
+                </div>
+
+                <div class="r_con fr">
+                    <div class="reg_title clearfix">
+                        <h1>绑定用户</h1>
+                    </div>
+                    <div class="reg_form clearfix" v-cloak>
+                        <form id="reg_form" v-on:submit.prevent="on_submit">
+                        <ul>
+                            <li>
+                                <label>手机号:</label>
+                                <input type="text" v-model="mobile" v-on:blur="check_phone" name="phone" id="phone">
+                                <span v-show="error_phone" class="error_tip">{{ error_phone_message }}</span>
+                            </li>
+                            <li>
+                                <label>密码:</label>
+                                <input type="password" v-model="password" v-on:blur="check_pwd" name="pwd" id="pwd">
+                                <span v-show="error_password" class="error_tip">密码最少8位，最长20位</span>
+                            </li>
+                            <li>
+                                <label>短信验证码:</label>
+                                <input type="text" v-model="sms_code" v-on:blur="check_sms_code" name="msg_code" id="msg_code" class="msg_input">
+                                <a v-on:click="send_sms_code" class="get_msg_code">{{ sms_code_tip }}</a>
+                                <span v-show="error_sms_code" class="error_tip">{{ error_sms_code_message }}</span>
+                            </li>
+                            <li class="reg_sub">
+                                <input type="submit" value="保 存" name="">
+                            </li>
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer no-mp">
+                <div class="foot_link">
+                    <a href="#">关于我们</a>
+                    <span>|</span>
+                    <a href="#">联系我们</a>
+                    <span>|</span>
+                    <a href="#">招聘人才</a>
+                    <span>|</span>
+                    <a href="#">友情链接</a>
+                </div>
+                <p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
+                <p>电话：010-****888    京ICP备*******8号</p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/oauth_callback.js"></script>
+</body>
+</html>

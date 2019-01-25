@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>美多商城-商品列表</title>
+    <title>美多商城-搜索结果</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script type="text/javascript" src="js/host.js"></script>
@@ -42,7 +42,7 @@
         <div class="search_wrap fl">
             <form method="get" action="/search.html" class="search_con">
                 <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
-                <input type="button" class="input_btn fr" name="" value="搜索">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
             </form>
             <ul class="search_suggest fl">
                 <li><a href="#">索尼微单</a></li>
@@ -52,15 +52,30 @@
             </ul>
         </div>
 
-        <div @mouseenter="get_cart()" class="guest_cart fr">
+        <div class="guest_cart fr">
             <a href="#" class="cart_name fl">我的购物车</a>
-            <div class="goods_count fl" id="show_count">[[cart_total_count]]</div>
+            <div class="goods_count fl" id="show_count">15</div>
 
             <ul class="cart_goods_show">
-                <li v-for="sku in cart">
-                    <img :src="sku.default_image_url" alt="商品图片">
-                    <h4>[[sku.name]]</h4>
-                    <div>[[sku.count]]</div>
+                <li>
+                    <img src="images/goods/goods001.jpg" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>4</div>
+                </li>
+                <li>
+                    <img src="images/goods/goods002.jpg" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>5</div>
+                </li>
+                <li>
+                    <img src="images/goods/goods003.jpg" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+                <li>
+                    <img src="images/goods/goods003.jpg" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
                 </li>
             </ul>
         </div>
@@ -80,7 +95,7 @@
                             <div class="list_group">
                                 <div class="group_name fl">手机通讯 &gt;</div>
                                 <div class="group_detail fl">
-                                    <a href="/list.html?cat=115">手机</a>
+                                    <a href="#">手机</a>
                                     <a href="#">对讲机</a>
                                     <a href="#">以旧换新</a>
                                     <a href="#">手机维修</a>
@@ -261,39 +276,13 @@
         </div>
     </div>
 
-    <div class="breadcrumb">
-        <a :href="cat1.url">[[cat1.category.name]]</a>
-        <span>></span>
-        <span>[[cat2.name]]</span>
-        <span>></span>
-        <a href="#">[[cat3.name]]</a>
-    </div>
 
     <div class="main_wrap clearfix">
-        <div class="l_wrap fl clearfix">
-            <div class="new_goods">
-                <h3>热销排行</h3>
-                <ul>
-                    <li v-for="sku in hots">
-                        <a :href="sku.url"><img :src="sku.default_image_url"></a>
-                        <h4><a :href="sku.url">[[sku.name]]</a></h4>
-                        <div class="prize">￥[[sku.price]]</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="r_wrap fr clearfix">
-            <div class="sort_bar">
-                <a @click="on_sort('-create_time')" :class="ordering=='-create_time'?'active':''">默认</a>
-                <a @click="on_sort('price')" :class="ordering=='price'?'active':''">价格</a>
-                <a @click="on_sort('sales')" :class="ordering=='sales'?'active':''">人气</a>
-            </div>
-
+        <div class=" clearfix">
             <ul class="goods_type_list clearfix">
                 <li v-for="sku in skus">
-                    <a :href="sku.url"><img :src="sku.default_image_url"></a>
-                    <h4><a :href="sku.url">[[sku.name]]</a></h4>
+                    <a :href=sku.url><img :src="sku.default_image_url"></a>
+                    <h4><a :href=sku.url>[[sku.name]]</a></h4>
                     <div class="operate">
                         <span class="prize">￥[[sku.price]]</span>
                         <span>[[sku.comments]]评价</span>
@@ -324,6 +313,6 @@
         <p>电话：010-****888    京ICP备*******8号</p>
     </div>
     </div>
-    <script type="text/javascript" src="js/list.js"></script>
+    <script type="text/javascript" src="js/search.js"></script>
 </body>
 </html>

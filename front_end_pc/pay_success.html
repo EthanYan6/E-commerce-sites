@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>美多商城-购物车</title>
+    <title>美多商城-支付成功</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script type="text/javascript" src="js/host.js"></script>
@@ -39,43 +39,22 @@
 
     <div class="search_bar clearfix">
         <a href="index.html" class="logo fl"><img src="images/logo.png"></a>
-        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;购物车</div>
+        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;支付完成</div>
         <form method="get" action="/search.html" class="search_con fr mt40">
             <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
             <input type="submit" class="input_btn fr" name="" value="搜索">
         </form>
     </div>
 
-    <div class="total_count">全部商品<em>{{total_count}}</em>件</div>
-    <ul class="cart_list_th clearfix">
-        <li class="col01">商品名称</li>
-        <li class="col03">商品价格</li>
-        <li class="col04">数量</li>
-        <li class="col05">小计</li>
-        <li class="col06">操作</li>
-    </ul>
-    <ul class="cart_list_td clearfix" v-for="(sku,index) in cart">
-        <li class="col01"><input type="checkbox" name="" v-model="sku.selected" @change="update_selected(index)"></li>
-        <li class="col02"><img :src="sku.default_image_url"></li>
-        <li class="col03">{{ sku.name }}</li>
-        <li class="col05">{{ sku.price }}元</li>
-        <li class="col06">
-            <div class="num_add">
-                <a @click="on_add(index)" class="add fl">+</a>
-                <input v-model="sku.count" @focus="origin_input=sku.count" @blur="on_input(index)" type="text" class="num_show fl">
-                <a @click="on_minus(index)" class="minus fl">-</a>
-            </div>
-        </li>
-        <li class="col07">{{sku.amount}}元</li>
-        <li class="col08"><a @click="on_delete(index)">删除</a></li>
-    </ul>
 
-    <ul class="settlements">
-        <li class="col01"><input type="checkbox" name="" @change="on_selected_all" v-model="selected_all"></li>
-        <li class="col02">全选</li>
-        <li class="col03">合计(不含运费)：<span>¥</span><em>{{total_selected_amount}}</em><br>共计<b>{{total_selected_count}}</b>件商品</li>
-        <li class="col04"><a href="place_order.html">去结算</a></li>
-    </ul>
+
+    <div class="common_list_con clearfix">
+        <div class="order_success">
+            <p><b>订单支付成功</b></p>
+            <p>您的订单已成功支付，支付交易号：{{trade_id}}</p>
+            <p><a href="/user_center_order.html">您可以在用户中心中我的订单中查看该订单</a></p>
+        </div>
+    </div>
 
     <div class="footer">
         <div class="foot_link">
@@ -91,6 +70,38 @@
         <p>电话：010-****888    京ICP备*******8号</p>
     </div>
     </div>
-    <script type="text/javascript" src="/js/cart.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                host,
+                trade_id: '',
+                username: sessionStorage.username || localStorage.username,
+                token: sessionStorage.token || localStorage.token,
+            },
+            mounted: function(){
+                axios.put(this.host+'/payment/status/'+document.location.search,{}, {
+                        responseType: 'json',
+                        headers:{
+                            'Authorization': 'JWT ' + this.token
+                        },
+                    })
+                    .then(response => {
+                        this.trade_id = response.data.trade_id;
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                    })
+            },
+            methods: {
+                // 退出
+                logout: function(){
+                    sessionStorage.clear();
+                    localStorage.clear();
+                    location.href = '/login.html';
+                }
+            }
+        })
+    </script>
 </body>
 </html>

@@ -1,4 +1,2 @@
-/**
- * Created by python on 19-1-22.
- */
-var host = 'http://api.ethanyan.site:8000';
+// 后端API服务器地址
+var host='http://api.meiduo.site:8000';

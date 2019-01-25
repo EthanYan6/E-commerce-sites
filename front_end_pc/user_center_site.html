@@ -1,199 +1,162 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>美多商城-用户中心</title>
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<script type="text/javascript" src="js/vue-2.5.16.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>美多商城-用户中心</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript" src="js/host.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+    <script>
+        var user_id = sessionStorage.user_id || localStorage.user_id;
+        var token = sessionStorage.token || localStorage.token;
+        if (!(user_id && token)) {
+            location.href = '/login.html?next=/user_center_site.html';
+        }
+    </script>
 </head>
 <body>
-	<div id="app" v-cloak>
-	<div class="header_con">
-		<div class="header">
-			<div class="welcome fl">欢迎来到美多商城!</div>
-			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
-				<div class="login_btn fl">
-					<a href="login.html">登录</a>
-					<span>|</span>
-					<a href="register.html">注册</a>
-				</div>
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
-					<span>|</span>
-					<a href="cart.html">我的购物车</a>
-					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
-				</div>
-			</div>
-		</div>		
-	</div>
+    <div id="app" v-cloak>
+    <div class="header_con">
+        <div class="header">
+            <div class="welcome fl">欢迎来到美多商城!</div>
+            <div class="fr">
+                <div class="login_btn fl">
+                    欢迎您：<em>{{ username }}</em>
+                    <span>|</span>
+                    <a @click="logout">退出</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="user_center_info.html">用户中心</a>
+                    <span>|</span>
+                    <a href="cart.html">我的购物车</a>
+                    <span>|</span>
+                    <a href="user_center_order.html">我的订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="search_bar clearfix">
-		<a href="index.html" class="logo fl"><img src="images/logo.png"></a>
-		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
-		<div class="search_con fr mt40">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
-	</div>
+    <div class="search_bar clearfix">
+        <a href="index.html" class="logo fl"><img src="images/logo.png"></a>
+        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+        <form method="get" action="/search.html" class="search_con fr mt40">
+            <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+            <input type="submit" class="input_btn fr" name="" value="搜索">
+        </form>
+    </div>
 
-	<div class="main_con clearfix">
-		<div class="left_menu_con clearfix">
-			<h3>用户中心</h3>
-			<ul>
-				<li><a href="user_center_info.html">· 个人信息</a></li>
-				<li><a href="user_center_order.html">· 全部订单</a></li>
-				<li><a href="user_center_site.html" class="active">· 收货地址</a></li>
-				<li><a href="user_center_pass.html">· 修改密码</a></li>
-			</ul>
-		</div>
-		<div class="right_content clearfix">
-				<div class="site_top_con">
-					<a @click="is_show_edit=true">新增收货地址</a>
-					<span>你已创建了<b>11</b>个收货地址，最多可创建<b>20</b>个</span>
-				</div>
-				<div class="site_con">
-					<div class="site_title">
-						<h3>张大山 北京</h3>
-						<a href="javascript:;"></a>
-						<em>默认地址</em>						
-						<span>×</span>
-					</div>
-					<ul class="site_list">
-						<li><span>收货人：</span><b>张大山</b></li>
-						<li><span>所在地区：</span><b>北京昌平区六环内</b></li>
-						<li><span>地址：</span><b>昌平区天通苑北二区36栋</b></li>
-						<li><span>手机：</span><b>188****0000</b></li>
-						<li><span>固定电话：</span><b>78912345</b></li>
-						<li><span>电子邮箱：</span><b>dashan@126.com</b></li>
-					</ul>
-					<div class="down_btn">
-						<a href="#">编辑</a>
-					</div>
-				</div>
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <ul>
+                <li><a href="user_center_info.html">· 个人信息</a></li>
+                <li><a href="user_center_order.html">· 全部订单</a></li>
+                <li><a href="user_center_site.html" class="active">· 收货地址</a></li>
+                <li><a href="user_center_pass.html">· 修改密码</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+                <div class="site_top_con">
+                    <a @click="show_add">新增收货地址</a>
+                    <span>您已创建了<b>{{addresses.length}}</b>个收货地址，最多可创建<b>{{ limit }}</b>个</span>
+                </div>
+                <div class="site_con" v-for="(address, index) in addresses">
+                    <div class="site_title">
+                        <div v-if="is_set_title[index]">
+                            <input v-model="input_title" type="text" name="">
+                            <input @click="save_title(index)" type="button" name="" value="保 存">
+                            <input @click="cancel_title(index)" type="reset" name="" value="取 消">
+                        </div>
+                        <div v-else>
+                            <h3>{{ address.title }}</h3>
+                            <a @click="show_edit_title(index)"></a>
+                        </div>
+                        <em v-if="address.id==default_address_id">默认地址</em>
+                        <span @click="del_address(index)">×</span>
+                    </div>
+                    <ul class="site_list">
+                        <li><span>收货人：</span><b>{{ address.receiver }}</b></li>
+                        <li><span>所在地区：</span><b>{{ address.province }} {{address.city}} {{ address.district }}</b></li>
+                        <li><span>地址：</span><b>{{ address.place }}</b></li>
+                        <li><span>手机：</span><b>{{ address.mobile }}</b></li>
+                        <li><span>固定电话：</span><b>{{ address.tel }}</b></li>
+                        <li><span>电子邮箱：</span><b>{{ address.email }}</b></li>
+                    </ul>
+                    <div class="down_btn">
+                        <a v-if="address.id!=default_address_id" @click="set_default(index)">设为默认</a>
+                        <a @click="show_edit(index)">编辑</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="foot_link">
+            <a href="#">关于我们</a>
+            <span>|</span>
+            <a href="#">联系我们</a>
+            <span>|</span>
+            <a href="#">招聘人才</a>
+            <span>|</span>
+            <a href="#">友情链接</a>
+        </div>
+        <p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
+        <p>电话：010-****888    京ICP备*******8号</p>
+    </div>
 
-				<div class="site_con">
-					<div class="site_title">
-						<h3>张大山 北京</h3>
-						<a href="javascript:;"></a>
-						<span>×</span>
-					</div>
-					<ul class="site_list">
-						<li><span>收货人：</span><b>张大山</b></li>
-						<li><span>所在地区：</span><b>北京昌平区六环内</b></li>
-						<li><span>地址：</span><b>昌平区天通苑北二区36栋</b></li>
-						<li><span>手机：</span><b>188****0000</b></li>
-						<li><span>固定电话：</span><b>78912345</b></li>
-						<li><span>电子邮箱：</span><b>dashan@126.com</b></li>
-					</ul>
-					<div class="down_btn">
-						<a href="#">设为默认</a>
-						<a href="#">编辑</a>
-					</div>
-				</div>
-
-				<div class="site_con">
-					<div class="site_title">
-						<h3>张大山 北京</h3>
-						<a href="javascript:;"></a>
-						<span>×</span>
-					</div>
-					<ul class="site_list">
-						<li><span>收货人：</span><b>张大山</b></li>
-						<li><span>所在地区：</span><b>北京昌平区六环内</b></li>
-						<li><span>地址：</span><b>昌平区天通苑北二区36栋</b></li>
-						<li><span>手机：</span><b>188****0000</b></li>
-						<li><span>固定电话：</span><b>78912345</b></li>
-						<li><span>电子邮箱：</span><b>dashan@126.com</b></li>
-					</ul>
-					<div class="down_btn">
-						<a href="#">设为默认</a>
-						<a href="#">编辑</a>
-					</div>
-				</div>			
-		</div>
-	</div>
-	<div class="footer">
-		<div class="foot_link">
-			<a href="#">关于我们</a>
-			<span>|</span>
-			<a href="#">联系我们</a>
-			<span>|</span>
-			<a href="#">招聘人才</a>
-			<span>|</span>
-			<a href="#">友情链接</a>		
-		</div>
-		<p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
-		<p>电话：010-****888    京ICP备*******8号</p>
-	</div>
-
-	<div class="pop_con" v-show="is_show_edit">
-		<div class="site_con site_pop">
-				<div class="site_pop_title">
-					<h3>新增收货地址</h3>
-					<a @click="is_show_edit=false">×</a>
-				</div>				
-				<form>
-					<div class="form_group">
-						<label>*收货人：</label>
-						<input type="text" name="">
-					</div>
-					<div class="form_group">
-						<label>*所在地区：</label>
-						<select>
-							<option value="0">北京</option>
-							<option value="1">上海</option>
-							<option value="2">广州</option>
-							<option value="3">深圳</option>
-						</select>
-						<select>
-							<option value="0">北京</option>
-							<option value="1">上海</option>
-							<option value="2">广州</option>
-							<option value="3">深圳</option>
-						</select>
-						<select>
-							<option value="0">北京</option>
-							<option value="1">上海</option>
-							<option value="2">广州</option>
-							<option value="3">深圳</option>
-						</select>
-					</div>
-					<div class="form_group">
-						<label>*详细地址：</label>
-						<input type="text" name="">
-					</div>
-					<div class="form_group">
-						<label>*手机：</label>
-						<input type="text" name="">
-					</div>
-					<div class="form_group">
-						<label>固定电话：</label>
-						<input type="text" name="">
-					</div>
-					<div class="form_group">
-						<label>邮箱：</label>
-						<input type="text" name="">
-					</div>
-					<input type="button" name="" value="保 存" class="info_submit">
-					<input @click="is_show_edit=false" type="reset" name="" value="取 消" class="info_submit info_reset">
-				</form>
-		</div>
-		<div class="mask"></div>
-	</div>
-	</div>
-    <script type="text/javascript">
-		var vm = new Vue({
-			el: '#app',
-			data: {
-			    is_show_edit: false
-			}
-		})
-	</script>
+    <div class="pop_con" v-show="is_show_edit">
+        <div class="site_con site_pop">
+                <div class="site_pop_title">
+                    <h3 v-if="editing_address_index">编辑收货地址</h3>
+                    <h3 v-else>新增收货地址</h3>
+                    <a @click="is_show_edit=false">×</a>
+                </div>
+                <form>
+                    <div class="form_group">
+                        <label>*收货人：</label>
+                        <input v-model="form_address.receiver" @blur="check_receiver" type="text" name="">
+                        <span v-show="error_receiver" class="error_tip">请填写收件人</span>
+                    </div>
+                    <div class="form_group">
+                        <label>*所在地区：</label>
+                        <select v-model="form_address.province_id">
+                            <option v-for="province in provinces" v-bind:value="province.id">{{ province.name }}</option>
+                        </select>
+                        <select v-model="form_address.city_id">
+                            <option v-for="city in cities" v-bind:value="city.id">{{ city.name }}</option>
+                        </select>
+                        <select v-model="form_address.district_id">
+                            <option v-for="district in districts" v-bind:value="district.id">{{ district.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form_group">
+                        <label>*详细地址：</label>
+                        <input v-model="form_address.place" @blur="check_place" type="text" name="">
+                        <span v-show="error_place" class="error_tip">请填写地址信息</span>
+                    </div>
+                    <div class="form_group">
+                        <label>*手机：</label>
+                        <input v-model="form_address.mobile" @blur="check_mobile" type="text" name="">
+                        <span v-show="error_mobile" class="error_tip">手机信息有误</span>
+                    </div>
+                    <div class="form_group">
+                        <label>固定电话：</label>
+                        <input v-model="form_address.tel" type="text" name="">
+                    </div>
+                    <div class="form_group">
+                        <label>邮箱：</label>
+                        <input v-model="form_address.email" @blur="check_email" type="text" name="">
+                        <span v-show="error_email" class="error_tip">邮箱信息有误</span>
+                    </div>
+                    <input @click="save_address" type="button" name="" value="保 存" class="info_submit">
+                    <input @click="is_show_edit=false" type="reset" name="" value="取 消" class="info_submit info_reset">
+                </form>
+        </div>
+        <div class="mask"></div>
+    </div>
+    </div>
+    <script type="text/javascript" src="js/user_center_site.js"></script>
 </body>
 </html>

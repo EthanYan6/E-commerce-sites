@@ -29,7 +29,7 @@ SECRET_KEY = 'jl#33@sr^=!p(s@46b2&k4kost(@!k-#qtnjo$%ixenxlwb9i2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['api.ethanyan.site', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['api.meiduo.site', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -257,7 +257,7 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:8080',
     'localhost:8080',
-    'www.ethanyan.site:8080',
+    'www.meiduo.site:8080',
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 

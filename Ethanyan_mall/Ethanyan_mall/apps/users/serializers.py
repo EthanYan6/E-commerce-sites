@@ -35,6 +35,12 @@ class UserSerializer(serializers.ModelSerializer):
             }
         }
     # 参数完整性，用户名是否存在，手机号格式，手机号是否存在，是否同意协议，两次密码是否一致，短信验证码是否正确
+    def validate_username(self,value):
+        # 用户名不能全部为数字
+        if re.match('^\d+$',value):
+            raise serializers.ValidationError('用户名不能全部为数字')
+
+        return value
     def validate_mobile(self,value):
         """验证手机号"""
         if not re.match(r'^1[3-9]\d{9}$',value):
