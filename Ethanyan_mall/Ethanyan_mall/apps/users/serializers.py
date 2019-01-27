@@ -109,3 +109,9 @@ class UserSerializer(serializers.ModelSerializer):
         # 给user对象增加属性token，保存生成jwt token数据
         user.token = token
         return user
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """用户的序列化器类"""
+    class Meta:
+        model = User
+        fields = ('id','username','mobile','email','email_active')
