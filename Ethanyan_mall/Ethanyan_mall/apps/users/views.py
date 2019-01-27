@@ -1,30 +1,38 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.serializers import UserSerializer, UserDetailSerializer
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.mixins import RetrieveModelMixin
 # Create your views here.
 # GET /user/
-class UserDetailView(GenericAPIView):
+# class UserDetailView(RetrieveModelMixin,GenericAPIView):
+class UserDetailView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserDetailSerializer
-    def get(self,request):
-        """
-        获取登录用户基本信息
-        1.获取登录用户
-        2.将登录用户对象序列化并返回
-        """
-        # request.user
-        # 如果用户已经认证，request.user就是登录用户对象
-        # 如果用户没有认证，request.user就是一个匿名类的对象
-        # 1.获取登录用户
-        user = request.user
-        # 2.将登录用户对象序列化并返回
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
+    def get_object(self):
+        """返回登录用户对象"""
+        # self.request:request请求对象
+        return  self.request.user
+    # def get(self,request):
+    #     return self.retrieve(request)
+    # def get(self,request):
+    #     """
+    #     获取登录用户基本信息
+    #     1.获取登录用户
+    #     2.将登录用户对象序列化并返回
+    #     """
+    #     # request.user
+    #     # 如果用户已经认证，request.user就是登录用户对象
+    #     # 如果用户没有认证，request.user就是一个匿名类的对象
+    #     # 1.获取登录用户
+    #     user = request.user
+    #     # 2.将登录用户对象序列化并返回
+    #     serializer = self.get_serializer(user)
+    #     return Response(serializer.data)
 
 
 # GET /usernames/(?P<username>\w{5,20})/count/
