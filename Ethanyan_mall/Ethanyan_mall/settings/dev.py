@@ -270,3 +270,16 @@ QQ_CLIENT_ID = '101474184' # 开发应用APPid
 QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c' # 开发应用的APP-KEY
 QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html' # 回调网址
 QQ_STATE = '/' # 登录之后跳转的页面地址
+
+# 邮箱发送配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SMTP服务器地址
+EMAIL_HOST = 'smtp.163.com'
+# SMTP服务器端口
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'testokpass@163.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'MEIyoumima789'
+#收件人看到的发件人
+EMAIL_FROM = '闫氏商城<testokpass@163.com>'

@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView,UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.serializers import UserSerializer, UserDetailSerializer
@@ -7,7 +7,35 @@ from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import RetrieveModelMixin
+from users.serializers import EmailSerializer
 # Create your views here.
+
+# PUT /emails/verification/?token=<加密信息>
+class EmailVerifyView(APIView):
+    def put(self,request):
+        """
+        用户邮箱验证
+        1.获取token（加密用户信息）并进行校验（token必传，token是否有效）
+        2.设置用户的邮箱验证标记True
+        3.返回应答，邮箱验证成功
+        """
+        # 1.获取token（加密用户信息）并进行校验（token必传，token是否有效）
+        token = request.query_params.get('token')
+
+        if token is None:
+            return Response({'message':'缺少token参数'},status=status.HTTP_400_BAD_REQUEST)
+        # token是否有效
+        user = User.check_verify_email_token(token)
+        if user is None:
+            return Response({'message':'无效的token数据'},status=status.HTTP_400_BAD_REQUEST)
+
+        # 2.设置用户的邮箱验证标记True
+        user.email_active = True
+        user.save()
+
+        # 3.返回应答，邮箱验证成功
+        return Response({'message':'OK'})
+
 # GET /user/
 # class UserDetailView(RetrieveModelMixin,GenericAPIView):
 class UserDetailView(RetrieveAPIView):
@@ -103,3 +131,27 @@ class UserView(CreateAPIView):
 #         serializer.save()
 #         # 3.返回应答，注册成功
 #         return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+# PUT /email/
+# class EmailView(GenericAPIView):
+class EmailView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = EmailSerializer
+    def get_object(self):
+        """返回登录用户"""
+        return self.request.user
+    # def put(self,request):
+    #     """
+    #     保存登录用户的邮箱
+    #     1.获取参数并进校校验（email必传，邮箱格式）
+    #     2.设置登录用户的邮箱并给邮箱发送验证邮件
+    #     3.返回应答，邮箱设置成功
+    #     """
+    #     # 1.获取参数并进校校验（email必传，邮箱格式）
+    #     user = request.user
+    #     serializer = self.get_serializer(user,data=request.data)
+    #     serializer.is_vaild(raise_exception=True)
+    #     # 2.设置登录用户的邮箱并给邮箱发送验证邮件
+    #     serializer.save()
+    #     # 3.返回应答，邮箱设置成功
+    #     return Response(serializer.data)
