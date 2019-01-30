@@ -1,12 +1,26 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from areas.models import Area
 from areas.serializers import AreaSerializer, SubAreaSerializer
 
 
 # Create your views here.
+class AreasViewSet(ReadOnlyModelViewSet):
+    """地区视图集"""
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AreaSerializer
+        else:
+            return SubAreaSerializer
+    def get_queryset(self):
+        if self.action == 'list':
+            return Area.objects.filter(parent=None)
+        else:
+            return Area.objects.all()
+
 # GET /areas/
 class AreasView(ListAPIView):
     serializer_class = AreaSerializer
@@ -42,3 +56,5 @@ class SubAreasView(RetrieveAPIView):
     #     # 2.将指定地区的信息序列化并返回
     #     serializer = self.get_serializer(area)
     #     return Response(serializer.data)
+
+
