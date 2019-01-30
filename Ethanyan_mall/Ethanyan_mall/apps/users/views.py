@@ -1,11 +1,12 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView,UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from users import constants
-from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer
+from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer, AddressTitleSerializer
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
@@ -87,6 +88,45 @@ class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
         address.save()
         # 3.返回应答
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # 设置默认地址
+    # PUT /addresses/(?P<pk>\d+)/status/
+    @action(methods=['put'],detail=True)
+    def status(self,request,pk):
+        """
+        1.根据pk获取对应的地址数据
+        2.将此地址设置为用户的默认地址
+        3.返回应答
+        """
+        # 1.根据pk获取对应的地址数据
+        address = self.get_object()
+
+        # 2.将此地址设置为用户的默认地址
+        # request.user.default_address = adress
+        request.user.default_address_id = address.id
+        request.user.save()
+        # 3.返回应答
+        return Response({'message':'OK'},status=status.HTTP_200_OK)
+
+    # 设置地址标题
+    # PUT /address/(?P<pk>\d+)/title/
+    @action(methods=['put'],detail=True)
+    def title(self,request,pk):
+        """
+        1.根据pk获取对应的地址数据
+        2.获取title并进行校验
+        3.设置地址标题
+        4.返回应答
+        """
+        # 1.根据pk获取对应的地址数据
+        address = self.get_object()
+        # 2.获取title并进行校验
+        serializer = AddressTitleSerializer(address,data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # 3.设置地址标题
+        serializer.save()
+        # 4.返回应答
+        return Response(serializer.data)
 
 
 

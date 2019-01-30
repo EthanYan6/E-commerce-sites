@@ -173,3 +173,10 @@ class AddressSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class AddressTitleSerializer(serializers.ModelSerializer):
+    """
+    地址标题
+    """
+    class Meta:
+        model = Address
+        fields = ('title',)
