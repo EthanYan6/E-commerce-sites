@@ -2,13 +2,16 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 from areas.models import Area
 from areas.serializers import AreaSerializer, SubAreaSerializer
 
 
 # Create your views here.
-class AreasViewSet(ReadOnlyModelViewSet):
+# list
+# retrieve
+class AreasViewSet(CacheResponseMixin,ReadOnlyModelViewSet):
     """地区视图集"""
     def get_serializer_class(self):
         if self.action == 'list':
