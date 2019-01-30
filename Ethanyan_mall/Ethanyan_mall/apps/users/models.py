@@ -84,6 +84,13 @@ class User(AbstractUser):
 
 # 获取和user关联地址
 # user.addresses.all()
+# Address.objects.create(
+#     # ...
+#     province = '地区对象',
+#     city = '地区对象',
+#     district = '地区对象',
+#     # ...
+# )
 class Address(BaseModel):
     """
     用户地址

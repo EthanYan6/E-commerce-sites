@@ -1,7 +1,7 @@
 import re
 from django_redis import get_redis_connection
 from rest_framework import serializers
-from users.models import User
+from users.models import User, Address
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -145,3 +145,30 @@ class EmailSerializer(serializers.ModelSerializer):
         send_verify_email.delay(email,verify_url)
 
         return instance
+
+class AddressSerializer(serializers.ModelSerializer):
+    """地址序列化器类"""
+    province_id = serializers.IntegerField(label='省id')
+    city_id = serializers.IntegerField(label='市id')
+    district_id = serializers.IntegerField(label='区县id')
+    province = serializers.StringRelatedField(label='省名称',read_only=True)
+    city = serializers.StringRelatedField(label='市名称',read_only=True)
+    district = serializers.StringRelatedField(label='区县名称',read_only=True)
+
+    class Meta:
+        model = Address
+        exclude = ('user','is_deleted','create_time','update_time')
+
+    def valdate_mobile(self,value):
+        # 手机号格式
+        if not re.match(r'^1[3-9]\d{9}$',value):
+            raise serializers.ValidationError('手机号格斯不正确')
+        return value
+
+    def create(self, validated_data):
+        # 创建并保存新增地址数据
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super().create(validated_data)
+
+

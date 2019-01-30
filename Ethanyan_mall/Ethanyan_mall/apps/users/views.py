@@ -2,13 +2,37 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView,UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from users.serializers import UserSerializer, UserDetailSerializer
+from rest_framework.viewsets import GenericViewSet
+
+from users import constants
+from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
 from users.serializers import EmailSerializer
 # Create your views here.
+
+class AddressViewSet(CreateModelMixin,GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AddressSerializer
+
+    # POST /addresses/
+    def create(self, request, *args, **kwargs):
+        """
+        request.user:获取登录的用户
+        保存新增地址的数据
+        1.接收参数并进行校验
+        2.创建并保存新增地址数据
+        3.返回应答，地址创建成功
+        """
+        # 用户地址数据是否超过上限
+        count = request.user.addresses.filter(is_deleted = False).count()
+
+        if count>constants.USER_ADDRESS_COUNTS_LIMIT:
+            return Response({'message':'保存地址数据已经达到上限'},status=status.HTTP_400_BAD_REQUEST)
+        # 调用 CreateModelMixin 扩展类中create方法
+        return super().create(request)
 
 # PUT /emails/verification/?token=<加密信息>
 class EmailVerifyView(APIView):
