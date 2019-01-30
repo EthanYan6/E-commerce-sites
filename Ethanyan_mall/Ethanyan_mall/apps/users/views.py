@@ -9,13 +9,16 @@ from users.serializers import UserSerializer, UserDetailSerializer, AddressSeria
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
+from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin
 from users.serializers import EmailSerializer
 # Create your views here.
 
-class AddressViewSet(CreateModelMixin,GenericViewSet):
+class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AddressSerializer
+    def get_queryset(self):
+        """返回用户的地址查询集"""
+        return self.request.user.addresses.filter(is_deleted=False)
 
     # POST /addresses/
     def create(self, request, *args, **kwargs):
@@ -33,6 +36,60 @@ class AddressViewSet(CreateModelMixin,GenericViewSet):
             return Response({'message':'保存地址数据已经达到上限'},status=status.HTTP_400_BAD_REQUEST)
         # 调用 CreateModelMixin 扩展类中create方法
         return super().create(request)
+    # GET /addresses/
+    def list(self,request):
+        """
+        1.获取登录用户的所有地址数据
+        2.将用户的地址数据序列化并返回
+        """
+        user = request.user
+        # 1.获取登录用户的所有地址数据
+        addresses = self.get_queryset()
+
+        # 2.将用户的地址数据序列并返回
+        serializer = self.get_serializer(addresses,many=True)
+        return Response({
+            'user_id':user.id,  # 用户id
+            'default_address_id':user.default_address_id, # 默认地址id
+            'limit':constants.USER_ADDRESS_COUNTS_LIMIT, # 地址数量上限
+            'addresses':serializer.data,  # 地址数据
+        })
+    # PUT /addresses/(?P<pk>\d+)
+    # def update(self, request, pk):
+    #     """
+    #     1.根据pk获取对应的地址数据
+    #     2.获取参数并进行校验
+    #     3.保存修改地址的数据
+    #     4.返回应答，修改成功
+    #     """
+    #     # 1.根据pk获取对应的地址数据
+    #     address = self.get_object()
+    #     # 2.获取参数并进行校验
+    #     serializer = self.get_serializer(address,data = request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #
+    #     # 3.保存修改地址的数据
+    #     serializer.save()
+    #     # 4.返回应答，修改成功
+    #     return Response(serializer.data)
+
+    # DELETE /addresses/(?P<pk>\d+)/
+    def destroy(self,request,pk):
+        """
+        1.根据pk获取对应的地址数据
+        2.将地址删除
+        3.返回应答
+        """
+        # 1.根据pk获取对应的地址数据
+        address = self.get_object()
+        # 2.将地址删除
+        address.is_deleted = True
+        address.save()
+        # 3.返回应答
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 
 # PUT /emails/verification/?token=<加密信息>
 class EmailVerifyView(APIView):

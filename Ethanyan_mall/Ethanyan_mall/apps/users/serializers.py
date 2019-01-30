@@ -169,6 +169,7 @@ class AddressSerializer(serializers.ModelSerializer):
         # 创建并保存新增地址数据
         user = self.context['request'].user
         validated_data['user'] = user
+        # 调用`ModelSerializer`中的create方法完整地址创建
         return super().create(validated_data)
 
 
