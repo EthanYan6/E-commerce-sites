@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'pics.apps.PicsConfig',
     # 以后将安装的包放在上面，应用的包放在下面
     # 'Ethanyan_mall.apps.users.apps.UsersConfig',
     'users.apps.UsersConfig',
@@ -294,3 +295,13 @@ REST_FRAMEWORK_EXTENSIONS = {
     # 缓存存储
     'DEFAULT_USE_CACHE': 'default',
 }
+
+# FastDFS
+# FDFS文件存储配置
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
+
+# FDFS Nginx的地址
+FDFS_NGINX_URL = 'http://image.meiduo.site:8888/'
+
+# 设置Django文件系统的存储类
+DEFAULT_FILE_STORAGE = 'Ethanyan_mall.utils.fastdfs.fdfs_storage.FDFSStorage'
