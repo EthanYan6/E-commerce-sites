@@ -15,6 +15,7 @@ from users.serializers import EmailSerializer
 # Create your views here.
 
 class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
+    """地址视图集"""
     permission_classes = [IsAuthenticated]
     serializer_class = AddressSerializer
     def get_queryset(self):
@@ -30,7 +31,7 @@ class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
         2.创建并保存新增地址数据
         3.返回应答，地址创建成功
         """
-        # 用户地址数据是否超过上限
+        # 用户地址数量是否超过上限
         count = request.user.addresses.filter(is_deleted = False).count()
 
         if count>constants.USER_ADDRESS_COUNTS_LIMIT:
