@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',  # 富文本编辑器
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
+    'django_crontab',  # 定时任务
     'pics.apps.PicsConfig',
     # 以后将安装的包放在上面，应用的包放在下面
     # 'Ethanyan_mall.apps.users.apps.UsersConfig',
@@ -322,3 +323,11 @@ CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所�
 # 生成的静态html文件保存目录
 GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
 
+# 定时任务设置
+CRONJOBS = [
+    # 每1分钟执行一次生成主页静态文件
+    ('*/1 * * * *', 'contents.crons.generate_static_index_html', '>> ' + os.path.dirname(BASE_DIR) + '/logs/crontab.log')
+]
+
+# 解决crontab中文问题
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
