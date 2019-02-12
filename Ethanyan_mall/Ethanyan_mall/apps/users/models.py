@@ -1,3 +1,4 @@
+from Ethanyan_mall.settings import dev
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -31,12 +32,14 @@ class User(AbstractUser):
 
     def generate_verify_email_url(self):
         """生成用户的邮箱验证链接地址"""
+        # itsdangerous:进行数据的签名加密和解密
         # 组织数据
         data = {
             'id':self.id,
             'email':self.email
         }
         # 进行加密
+        # serializer = TJWSSerializer(secret_key=dev.SECRET_KEY,expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
         serializer = TJWSSerializer(secret_key=settings.SECRET_KEY,expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
         token = serializer.dumps(data).decode()
 
