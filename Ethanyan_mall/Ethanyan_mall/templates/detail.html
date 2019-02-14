@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>美多商城-商品详情</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <script type="text/javascript" src="/js/host.js"></script>
+    <script type="text/javascript" src="/js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="/js/axios-0.18.0.min.js"></script>
+</head>
+<body>
+    <div id="app" v-cloak>
+    <div class="header_con">
+        <div class="header">
+            <div class="welcome fl">欢迎来到美多商城!</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    欢迎您：<em>[[ username ]]</em>
+                    <span>|</span>
+                    <a @click="logout">退出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="/login.html">登录</a>
+                    <span>|</span>
+                    <a href="/register.html">注册</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="/user_center_info.html">用户中心</a>
+                    <span>|</span>
+                    <a href="/cart.html">我的购物车</a>
+                    <span>|</span>
+                    <a href="/user_center_order.html">我的订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search_bar clearfix">
+            <a href="/index.html" class="logo fl"><img src="/images/logo.png"></a>
+            <div class="search_wrap fl">
+                <form method="get" action="/search.html" class="search_con">
+                    <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                    <input type="submit" class="input_btn fr" name="" value="搜索">
+                </form>
+                <ul class="search_suggest fl">
+                    <li><a href="#">索尼微单</a></li>
+                    <li><a href="#">优惠15元</a></li>
+                    <li><a href="#">美妆个护</a></li>
+                    <li><a href="#">买2免1</a></li>
+                </ul>
+            </div>
+
+            <div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的购物车</a>
+            <div class="goods_count fl" id="show_count">15</div>
+
+            <ul class="cart_goods_show">
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>4</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>5</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+            </ul>
+        </div>
+
+        </div>
+
+        <div class="navbar_con">
+                <div class="navbar">
+                    <div class="sub_menu_con fl">
+                        <h1 class="fl">商品分类</h1>
+                        <ul class="sub_menu">
+                            {% for group in categories.values %}
+                            <li>
+                                <div class="level1">
+                                    {% for channel in group.channels %}
+                                    <a href="{{ channel.url }}">{{ channel.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                <div class="level2">
+                                    {% for cat2 in group.sub_cats %}
+                                    <div class="list_group">
+                                        <div class="group_name fl">{{cat2.name}} &gt;</div>
+                                        <div class="group_detail fl">
+                                            {% for cat3 in cat2.sub_cats %}
+                                            <a href="/list.html?cat={{cat3.id}}">{{cat3.name}}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <ul class="navlist fl">
+                        <li><a href="">首页</a></li>
+                        <li class="interval">|</li>
+                        <li><a href="">真划算</a></li>
+                        <li class="interval">|</li>
+                        <li><a href="">抽奖</a></li>
+                    </ul>
+                </div>
+            </div>
+
+    <div class="breadcrumb">
+        <a href="{{ goods.channel.url }}">{{ goods.category1.name }}</a>
+        <span>></span>
+        <span>{{ goods.category2.name }}</span>
+        <span>></span>
+        <a href="/list.html?cat={{ goods.category3.id }}">{{goods.category3.name }}</a>
+    </div>
+
+    <div class="goods_detail_con clearfix">
+        <div class="goods_detail_pic fl"><img src="{{ sku.default_image_url }}"></div>
+        <div class="goods_detail_list fr">
+            <h3>{{ sku.name }}</h3>
+            <p>{{ sku.caption }}</p>
+            <div class="prize_bar">
+                <span class="show_pirze">¥<em>{{ sku.price }}</em></span><span> 市场价￥{{sku.market_price}}</span>
+                <a href="javascript:;" class="goods_judge">{{ sku.comments }}人评价</a>
+            </div>
+            <div class="goods_num clearfix">
+                <div class="num_name fl">数 量：</div>
+                <div class="num_add fl">
+                    <input v-model="sku_count" type="text" class="num_show fl">
+                    <a @click="sku_count++" class="add fr">+</a>
+                    <a @click="on_minus()" class="minus fr">-</a>
+                </div>
+            </div>
+            {% for spec in specs %}
+            <div class="type_select">
+                <label>{{ spec.name }}:</label>
+                {% for option in spec.options %}
+                {% if option.sku_id == sku.id %}
+                <a href="javascript:;" class="select">{{ option.value }}</a>
+                {% elif option.sku_id %}
+                <a href="/goods/{{option.sku_id}}.html">{{ option.value }}</a>
+                {% else %}
+                <a href="javascript:;" style="border: 1px dotted gray;">{{ option.value }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="total">总价：<em>[[sku_amount]]元</em></div>
+            <div class="operate_btn">
+                <a @click="add_cart" class="add_cart" id="add_cart">加入购物车</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl clearfix">
+            <div class="new_goods">
+                <h3>热销排行</h3>
+                <ul>
+                    <li v-for="sku in hots">
+                        <a :href="sku.url"><img :src="sku.default_image_url"></a>
+                        <h4><a :href="sku.url">[[sku.name]]</a></h4>
+                        <div class="prize">￥[[sku.price]]</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="r_wrap fr clearfix">
+            <ul class="detail_tab clearfix">
+                <li @click="on_tab_content('detail')" :class="tab_content.detail?'active':''">商品详情</li>
+                <li @click="on_tab_content('pack')" :class="tab_content.pack?'active':''">规格与包装</li>
+                <li @click="on_tab_content('comment')" :class="tab_content.comment?'active':''">商品评价([[comments.length]])</li>
+                <li @click="on_tab_content('service')" :class="tab_content.service?'active':''">售后服务</li>
+            </ul>
+            <div @click="on_tab_content('detail')" class="tab_content" :class="tab_content.detail?'current':''">
+                <dl>
+                    <dt>商品详情：</dt>
+                    <dd>{{ goods.desc_detail|safe }}</dd>
+                </dl>
+            </div>
+            <div @click="on_tab_content('pack')" class="tab_content" :class="tab_content.pack?'current':''">
+                <dl>
+                    <dt>规格与包装：</dt>
+                    <dd>{{ goods.desc_pack|safe }}</dd>
+                </dl>
+            </div>
+            <div @click="on_tab_content('comment')" class="tab_content" :class="tab_content.comment?'current':''">
+                <ul class="judge_list_con">
+                    <li class="judge_list fl" v-for="comment in comments">
+                        <div class="user_info fl">
+                            <b>[[comment.username]]</b>
+                        </div>
+                        <div class="judge_info fl">
+                            <div :class="comment.score_class"></div>
+                            <div class="judge_detail">[[comment.comment]]</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div @click="on_tab_content('service')" class="tab_content" :class="tab_content.service?'current':''">
+                <dl>
+                    <dt>售后服务：</dt>
+                    <dd>{{ goods.desc_service|safe }}</dd>
+                </dl>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="foot_link">
+            <a href="#">关于我们</a>
+            <span>|</span>
+            <a href="#">联系我们</a>
+            <span>|</span>
+            <a href="#">招聘人才</a>
+            <span>|</span>
+            <a href="#">友情链接</a>
+        </div>
+        <p>CopyRight © 2016 北京美多商业股份有限公司 All Rights Reserved</p>
+        <p>电话：010-****888    京ICP备*******8号</p>
+    </div>
+    </div>
+    <script type="text/javascript">
+        var price = {{sku.price}};
+        var cat = {{ goods.category3.id }};
+    </script>
+    <script type="text/javascript" src="/js/detail.js"></script>
+</body>
+</html>
