@@ -1,12 +1,16 @@
 # privacy
-username:admin
-password:123456abc
-email:admin@ethanyan.com
+username:admin<br>
+password:123456abc<br>
+email:admin@ethanyan.com<br>
 
 # otherthings
-后端访问域名api.Ethanyan.site
-前端访问www.Ethanyan.site
+后端访问域名api.Ethanyan.site<br>
+前端访问www.Ethanyan.site<br>
 
-更改网站域名
-后端访问域名api.meiduo.site
-前端访问www.meiduo.site
+更改网站域名<br>
+后端访问域名api.meiduo.site<br>
+前端访问www.meiduo.site<br>
+
+数据库的账户密码<br>
+账号：meiduo<br>
+密码：meiduo<br>

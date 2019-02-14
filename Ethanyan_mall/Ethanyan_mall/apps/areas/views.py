@@ -26,6 +26,7 @@ class AreasViewSet(CacheResponseMixin,ReadOnlyModelViewSet):
 
 # GET /areas/
 class AreasView(ListAPIView):
+    # 指定当前视图所使用的序列化器类
     serializer_class = AreaSerializer
     # 指定当前视图所使用的查询集
     queryset = Area.objects.filter(parent=None)

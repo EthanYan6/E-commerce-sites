@@ -40,12 +40,15 @@ class User(AbstractUser):
         }
         # 进行加密
         # serializer = TJWSSerializer(secret_key=dev.SECRET_KEY,expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
+        # 下面django.conf模块加载settings.SECRET_KEY是从内存中动态的加载的，使用Ctrl 鼠标左键 快捷键是点不进去的，因为并不是从文件中直接加载。
         serializer = TJWSSerializer(secret_key=settings.SECRET_KEY,expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
         token = serializer.dumps(data).decode()
 
         # 拼接链接地址
         verify_url = 'http://www.meiduo.site:8080/success_verify_email.html?token=' + token
         return verify_url
+
+    # 使其成为静态方法，让我们可以直接通过类名来调用
     @staticmethod
     def check_verify_email_token(token):
         """

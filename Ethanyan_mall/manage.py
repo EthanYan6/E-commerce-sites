@@ -5,7 +5,7 @@ import sys
 if __name__ == "__main__":
     import sys
     # 打印当前项目的搜索包目录列表
-    print(sys.path)
+    # print(sys.path)
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Ethanyan_mall.settings.dev")
     try:
         from django.core.management import execute_from_command_line
