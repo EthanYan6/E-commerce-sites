@@ -27,7 +27,7 @@ def generate_static_index_html():
     #
     #     }
     # }
-    categories = OrderedDict()
+    categories = OrderedDict() # 有序字典
     channels = GoodsChannel.objects.order_by('group_id','sequence')
     for channel in channels:
         group_id = channel.group_id  # 当前组
