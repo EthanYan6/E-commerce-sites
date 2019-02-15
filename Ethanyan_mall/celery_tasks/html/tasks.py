@@ -34,22 +34,25 @@ def generate_static_sku_detail_html(sku_id):
     for spec in sku_specs:
         sku_key.append(spec.option.id)
 
-    # 获取当前商品的所有SKU
+    # 获取当前商品的所有SKU，由一查多，由spu查找所有的sku
     skus = goods.sku_set.all()
 
-    # 构建不同规格参数（选项）的sku字典
+    # 下面代码最后形成的字典
+    # 构建不同规格参数（选项）的sku字典，规格参数代表的是屏幕尺寸、颜色之类的这些参数。
     # spec_sku_map = {
-    #     (规格1参数id, 规格2参数id, 规格3参数id, ...): sku_id,
-    #     (规格1参数id, 规格2参数id, 规格3参数id, ...): sku_id,
+    #     (规格1参数id, 规格2参数id, 规格3参数id, ...): sku_id, # 比如16g红色的iPhonese
+    #     (规格1参数id, 规格2参数id, 规格3参数id, ...): sku_id, # 比如64g玫瑰金的iPhonese
     #     ...
     # }
     spec_sku_map = {}
+    # 遍历每一个商品
     for s in skus:
-        # 获取sku的规格参数
+        # 获取sku的规格参数，最后按照规格的id进行排序
         s_specs = s.skuspecification_set.order_by('spec_id')
         # 用于形成规格参数-sku字典的键
         key = []
         for spec in s_specs:
+            # 根据sku规格对象，找到和其关联的选项，然后将其加入列表中
             key.append(spec.option.id)
         # 向规格参数-sku字典添加记录
         spec_sku_map[tuple(key)] = s.id
