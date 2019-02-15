@@ -75,15 +75,18 @@ def generate_static_sku_detail_html(sku_id):
     #    },
     #    ...
     # ]
+    # 查找商品的规格，并且按照id进行排序
     specs = goods.goodsspecification_set.order_by('id')
     # 若当前sku的规格信息不完整，则不再继续
     if len(sku_key) < len(specs):
         return
+    # 遍历每一个规格的下标以及这个规格地元素
     for index, spec in enumerate(specs):
         # 复制当前sku的规格键
         key = sku_key[:]
         # 该规格的选项
         options = spec.specificationoption_set.all()
+        # 遍历每一个选项
         for option in options:
             # 在规格参数sku字典中查找符合当前规格的sku
             key[index] = option.id
