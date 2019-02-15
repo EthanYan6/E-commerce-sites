@@ -1,0 +1,1835 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>闫氏商城-商品详情</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <script type="text/javascript" src="/js/host.js"></script>
+    <script type="text/javascript" src="/js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="/js/axios-0.18.0.min.js"></script>
+</head>
+<body>
+    <div id="app" v-cloak>
+    <div class="header_con">
+        <div class="header">
+            <div class="welcome fl">欢迎来到闫氏商城!</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    欢迎您：<em>[[ username ]]</em>
+                    <span>|</span>
+                    <a @click="logout">退出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="/login.html">登录</a>
+                    <span>|</span>
+                    <a href="/register.html">注册</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="/user_center_info.html">用户中心</a>
+                    <span>|</span>
+                    <a href="/cart.html">我的购物车</a>
+                    <span>|</span>
+                    <a href="/user_center_order.html">我的订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search_bar clearfix">
+            <a href="/index.html" class="logo fl"><img src="/images/logo.png"></a>
+            <div class="search_wrap fl">
+                <form method="get" action="/search.html" class="search_con">
+                    <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                    <input type="submit" class="input_btn fr" name="" value="搜索">
+                </form>
+                <ul class="search_suggest fl">
+                    <li><a href="#">索尼微单</a></li>
+                    <li><a href="#">优惠15元</a></li>
+                    <li><a href="#">美妆个护</a></li>
+                    <li><a href="#">买2免1</a></li>
+                </ul>
+            </div>
+
+            <div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的购物车</a>
+            <div class="goods_count fl" id="show_count">15</div>
+
+            <ul class="cart_goods_show">
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>4</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>5</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+                <li>
+                    <img src="#" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+            </ul>
+        </div>
+
+        </div>
+
+        <div class="navbar_con">
+                <div class="navbar">
+                    <div class="sub_menu_con fl">
+                        <h1 class="fl">商品分类</h1>
+                        <ul class="sub_menu">
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://shouji.jd.com">手机</a>
+                                    
+                                    <a href="http://www.itcast.cn">相机</a>
+                                    
+                                    <a href="http://www.itcast.cn">数码</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">手机通讯 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=115">手机</a>
+                                            
+                                            <a href="/list.html?cat=116">游戏手机</a>
+                                            
+                                            <a href="/list.html?cat=117">老人机</a>
+                                            
+                                            <a href="/list.html?cat=118">对讲机</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">手机配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=119">手机壳</a>
+                                            
+                                            <a href="/list.html?cat=120">贴膜</a>
+                                            
+                                            <a href="/list.html?cat=121">手机存储卡</a>
+                                            
+                                            <a href="/list.html?cat=122">数据线</a>
+                                            
+                                            <a href="/list.html?cat=123">充电器</a>
+                                            
+                                            <a href="/list.html?cat=124">无线充电器</a>
+                                            
+                                            <a href="/list.html?cat=125">手机耳机</a>
+                                            
+                                            <a href="/list.html?cat=126">移动电源</a>
+                                            
+                                            <a href="/list.html?cat=127">手机支架</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">摄影摄像 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=128">数码相机</a>
+                                            
+                                            <a href="/list.html?cat=129">微单相机</a>
+                                            
+                                            <a href="/list.html?cat=130">单反相机</a>
+                                            
+                                            <a href="/list.html?cat=131">拍立得</a>
+                                            
+                                            <a href="/list.html?cat=132">运动相机</a>
+                                            
+                                            <a href="/list.html?cat=133">摄像机</a>
+                                            
+                                            <a href="/list.html?cat=134">镜头</a>
+                                            
+                                            <a href="/list.html?cat=135">数码相框</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">数码配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=136">存储卡</a>
+                                            
+                                            <a href="/list.html?cat=137">三脚架</a>
+                                            
+                                            <a href="/list.html?cat=138">闪光灯</a>
+                                            
+                                            <a href="/list.html?cat=139">电池充电器</a>
+                                            
+                                            <a href="/list.html?cat=140">读卡器</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">影音娱乐 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=141">耳机耳麦</a>
+                                            
+                                            <a href="/list.html?cat=142">音箱音响</a>
+                                            
+                                            <a href="/list.html?cat=143">智能音箱</a>
+                                            
+                                            <a href="/list.html?cat=144">收音机</a>
+                                            
+                                            <a href="/list.html?cat=145">麦克风</a>
+                                            
+                                            <a href="/list.html?cat=146">专业音频</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">智能设备 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=147">智能手环</a>
+                                            
+                                            <a href="/list.html?cat=148">智能手表</a>
+                                            
+                                            <a href="/list.html?cat=149">智能眼镜</a>
+                                            
+                                            <a href="/list.html?cat=150">智能机器人</a>
+                                            
+                                            <a href="/list.html?cat=151">健康监测</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">电子教育 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=152">学生平板</a>
+                                            
+                                            <a href="/list.html?cat=153">点读机</a>
+                                            
+                                            <a href="/list.html?cat=154">早教益智</a>
+                                            
+                                            <a href="/list.html?cat=155">电纸书</a>
+                                            
+                                            <a href="/list.html?cat=156">电子词典</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">电脑</a>
+                                    
+                                    <a href="http://www.itcast.cn">办公</a>
+                                    
+                                    <a href="http://www.itcast.cn">家用电器</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">电脑整机 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=157">笔记本</a>
+                                            
+                                            <a href="/list.html?cat=158">游戏本</a>
+                                            
+                                            <a href="/list.html?cat=159">平板电脑</a>
+                                            
+                                            <a href="/list.html?cat=160">台式机</a>
+                                            
+                                            <a href="/list.html?cat=161">一体机</a>
+                                            
+                                            <a href="/list.html?cat=162">工作站</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">电脑配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=163">显示器</a>
+                                            
+                                            <a href="/list.html?cat=164">CPU</a>
+                                            
+                                            <a href="/list.html?cat=165">主板</a>
+                                            
+                                            <a href="/list.html?cat=166">显卡</a>
+                                            
+                                            <a href="/list.html?cat=167">硬盘</a>
+                                            
+                                            <a href="/list.html?cat=168">内存</a>
+                                            
+                                            <a href="/list.html?cat=169">机箱</a>
+                                            
+                                            <a href="/list.html?cat=170">电源</a>
+                                            
+                                            <a href="/list.html?cat=171">散热器</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">外设产品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=172">鼠标</a>
+                                            
+                                            <a href="/list.html?cat=173">键盘</a>
+                                            
+                                            <a href="/list.html?cat=174">键鼠套装</a>
+                                            
+                                            <a href="/list.html?cat=175">U盘</a>
+                                            
+                                            <a href="/list.html?cat=176">移动硬盘</a>
+                                            
+                                            <a href="/list.html?cat=177">鼠标垫</a>
+                                            
+                                            <a href="/list.html?cat=178">摄像头</a>
+                                            
+                                            <a href="/list.html?cat=179">线缆</a>
+                                            
+                                            <a href="/list.html?cat=180">手写板</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">办公设备 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=181">投影机</a>
+                                            
+                                            <a href="/list.html?cat=182">投影配件</a>
+                                            
+                                            <a href="/list.html?cat=183">多功能一体机</a>
+                                            
+                                            <a href="/list.html?cat=184">打印机</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">文具耗材 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=185">硒鼓墨粉</a>
+                                            
+                                            <a href="/list.html?cat=186">墨盒</a>
+                                            
+                                            <a href="/list.html?cat=187">色带</a>
+                                            
+                                            <a href="/list.html?cat=188">纸类</a>
+                                            
+                                            <a href="/list.html?cat=189">办公文具</a>
+                                            
+                                            <a href="/list.html?cat=190">文件收纳</a>
+                                            
+                                            <a href="/list.html?cat=191">计算器</a>
+                                            
+                                            <a href="/list.html?cat=192">笔类</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">空调 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=197">壁挂式空调</a>
+                                            
+                                            <a href="/list.html?cat=198">柜式空调</a>
+                                            
+                                            <a href="/list.html?cat=199">中央空调</a>
+                                            
+                                            <a href="/list.html?cat=200">节能空调</a>
+                                            
+                                            <a href="/list.html?cat=201">智能空调</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">洗衣机 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=202">滚筒洗衣机</a>
+                                            
+                                            <a href="/list.html?cat=203">洗烘一体机</a>
+                                            
+                                            <a href="/list.html?cat=204">波轮洗衣机</a>
+                                            
+                                            <a href="/list.html?cat=205">迷你洗衣机</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">冰箱 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=206">多门</a>
+                                            
+                                            <a href="/list.html?cat=207">对开门</a>
+                                            
+                                            <a href="/list.html?cat=208">三门</a>
+                                            
+                                            <a href="/list.html?cat=209">双门</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活电器 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=215">空气净化器</a>
+                                            
+                                            <a href="/list.html?cat=216">电风扇</a>
+                                            
+                                            <a href="/list.html?cat=217">扫地机器人</a>
+                                            
+                                            <a href="/list.html?cat=218">拖地机</a>
+                                            
+                                            <a href="/list.html?cat=219">干衣机</a>
+                                            
+                                            <a href="/list.html?cat=220">电话机</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">家居</a>
+                                    
+                                    <a href="http://www.itcast.cn">家具</a>
+                                    
+                                    <a href="http://www.itcast.cn">家装</a>
+                                    
+                                    <a href="http://www.itcast.cn">厨具</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活日用 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=221">收纳用品</a>
+                                            
+                                            <a href="/list.html?cat=222">雨伞雨具</a>
+                                            
+                                            <a href="/list.html?cat=223">净化除味</a>
+                                            
+                                            <a href="/list.html?cat=224">浴室用品</a>
+                                            
+                                            <a href="/list.html?cat=225">缝纫针织</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">家纺 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=226">床品套件</a>
+                                            
+                                            <a href="/list.html?cat=227">被子</a>
+                                            
+                                            <a href="/list.html?cat=228">枕芯</a>
+                                            
+                                            <a href="/list.html?cat=229">蚊帐</a>
+                                            
+                                            <a href="/list.html?cat=230">凉席</a>
+                                            
+                                            <a href="/list.html?cat=231">毛巾浴巾</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">灯具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=232">吸顶灯</a>
+                                            
+                                            <a href="/list.html?cat=233">吊灯</a>
+                                            
+                                            <a href="/list.html?cat=234">台灯</a>
+                                            
+                                            <a href="/list.html?cat=235">筒灯射灯</a>
+                                            
+                                            <a href="/list.html?cat=236">装饰灯</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">家具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=237">卧室家具</a>
+                                            
+                                            <a href="/list.html?cat=238">客厅家具</a>
+                                            
+                                            <a href="/list.html?cat=239">餐厅家具</a>
+                                            
+                                            <a href="/list.html?cat=240">书房家具</a>
+                                            
+                                            <a href="/list.html?cat=241">儿童家具</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">家装软饰 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=242">装饰字画</a>
+                                            
+                                            <a href="/list.html?cat=243">装饰摆件</a>
+                                            
+                                            <a href="/list.html?cat=244">十字绣</a>
+                                            
+                                            <a href="/list.html?cat=245">墙贴</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">家装主材 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=246">瓷砖</a>
+                                            
+                                            <a href="/list.html?cat=247">地板</a>
+                                            
+                                            <a href="/list.html?cat=248">油漆涂料</a>
+                                            
+                                            <a href="/list.html?cat=249">壁纸</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">五金电工 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=250">锁具</a>
+                                            
+                                            <a href="/list.html?cat=251">电动工具</a>
+                                            
+                                            <a href="/list.html?cat=252">手动工具</a>
+                                            
+                                            <a href="/list.html?cat=253">测量工具</a>
+                                            
+                                            <a href="/list.html?cat=254">劳防用品</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">厨具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=255">水具酒具</a>
+                                            
+                                            <a href="/list.html?cat=256">烹饪锅具</a>
+                                            
+                                            <a href="/list.html?cat=257">餐具</a>
+                                            
+                                            <a href="/list.html?cat=258">厨房配件</a>
+                                            
+                                            <a href="/list.html?cat=259">刀剪菜板</a>
+                                            
+                                            <a href="/list.html?cat=260">锅具套装</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">厨房卫浴 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=261">水槽</a>
+                                            
+                                            <a href="/list.html?cat=262">龙头</a>
+                                            
+                                            <a href="/list.html?cat=263">淋浴花洒</a>
+                                            
+                                            <a href="/list.html?cat=264">马桶</a>
+                                            
+                                            <a href="/list.html?cat=265">厨卫挂件</a>
+                                            
+                                            <a href="/list.html?cat=266">浴室柜</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">男装</a>
+                                    
+                                    <a href="http://www.itcast.cn">女装</a>
+                                    
+                                    <a href="http://www.itcast.cn">童装</a>
+                                    
+                                    <a href="http://www.itcast.cn">内衣</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">男装 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=267">T恤</a>
+                                            
+                                            <a href="/list.html?cat=268">牛仔裤</a>
+                                            
+                                            <a href="/list.html?cat=269">衬衫</a>
+                                            
+                                            <a href="/list.html?cat=270">短裤</a>
+                                            
+                                            <a href="/list.html?cat=271">羽绒服</a>
+                                            
+                                            <a href="/list.html?cat=272">卫衣</a>
+                                            
+                                            <a href="/list.html?cat=273">西服套装</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">女装 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=274">衬衫</a>
+                                            
+                                            <a href="/list.html?cat=275">雪纺衫</a>
+                                            
+                                            <a href="/list.html?cat=276">短衣套</a>
+                                            
+                                            <a href="/list.html?cat=277">卫衣</a>
+                                            
+                                            <a href="/list.html?cat=278">休闲裤</a>
+                                            
+                                            <a href="/list.html?cat=279">牛仔裤</a>
+                                            
+                                            <a href="/list.html?cat=280">小西装</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">童装 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=281">套装</a>
+                                            
+                                            <a href="/list.html?cat=282">卫衣</a>
+                                            
+                                            <a href="/list.html?cat=283">裤子</a>
+                                            
+                                            <a href="/list.html?cat=284">衬衫</a>
+                                            
+                                            <a href="/list.html?cat=285">羽绒服</a>
+                                            
+                                            <a href="/list.html?cat=286">棉服</a>
+                                            
+                                            <a href="/list.html?cat=287">内衣裤</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">童鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=288">运动鞋</a>
+                                            
+                                            <a href="/list.html?cat=289">靴子</a>
+                                            
+                                            <a href="/list.html?cat=290">帆布鞋</a>
+                                            
+                                            <a href="/list.html?cat=291">棉鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">内衣 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=292">睡衣</a>
+                                            
+                                            <a href="/list.html?cat=293">打底裤</a>
+                                            
+                                            <a href="/list.html?cat=294">保暖内衣</a>
+                                            
+                                            <a href="/list.html?cat=295">背心</a>
+                                            
+                                            <a href="/list.html?cat=296">男士内裤</a>
+                                            
+                                            <a href="/list.html?cat=297">女士内裤</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">配饰 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=298">披肩</a>
+                                            
+                                            <a href="/list.html?cat=299">围巾</a>
+                                            
+                                            <a href="/list.html?cat=300">镜片</a>
+                                            
+                                            <a href="/list.html?cat=301">太阳镜</a>
+                                            
+                                            <a href="/list.html?cat=302">毛线帽</a>
+                                            
+                                            <a href="/list.html?cat=303">礼貌</a>
+                                            
+                                            <a href="/list.html?cat=304">口罩</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">女鞋</a>
+                                    
+                                    <a href="http://www.itcast.cn">箱包</a>
+                                    
+                                    <a href="http://www.itcast.cn">钟表</a>
+                                    
+                                    <a href="http://www.itcast.cn">珠宝</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">时尚女鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=305">单鞋</a>
+                                            
+                                            <a href="/list.html?cat=306">休闲鞋</a>
+                                            
+                                            <a href="/list.html?cat=307">帆布鞋</a>
+                                            
+                                            <a href="/list.html?cat=308">妈妈鞋</a>
+                                            
+                                            <a href="/list.html?cat=309">女靴</a>
+                                            
+                                            <a href="/list.html?cat=310">高跟鞋</a>
+                                            
+                                            <a href="/list.html?cat=311">凉鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">潮流女包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=312">真皮包</a>
+                                            
+                                            <a href="/list.html?cat=313">单肩包</a>
+                                            
+                                            <a href="/list.html?cat=314">手提包</a>
+                                            
+                                            <a href="/list.html?cat=315">鞋挎包</a>
+                                            
+                                            <a href="/list.html?cat=316">双肩包</a>
+                                            
+                                            <a href="/list.html?cat=317">钱包</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">精品男包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=318">男士钱包</a>
+                                            
+                                            <a href="/list.html?cat=319">双肩包</a>
+                                            
+                                            <a href="/list.html?cat=320">单肩包</a>
+                                            
+                                            <a href="/list.html?cat=321">商务公文包</a>
+                                            
+                                            <a href="/list.html?cat=322">男士手包</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">功能箱包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=323">拉杆箱</a>
+                                            
+                                            <a href="/list.html?cat=324">拉杆包</a>
+                                            
+                                            <a href="/list.html?cat=325">旅行包</a>
+                                            
+                                            <a href="/list.html?cat=326">电脑包</a>
+                                            
+                                            <a href="/list.html?cat=327">休闲运动包</a>
+                                            
+                                            <a href="/list.html?cat=328">书包</a>
+                                            
+                                            <a href="/list.html?cat=329">登山包</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">钟表 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=330">天梭</a>
+                                            
+                                            <a href="/list.html?cat=331">浪琴</a>
+                                            
+                                            <a href="/list.html?cat=332">欧米茄</a>
+                                            
+                                            <a href="/list.html?cat=333">泰格豪雅</a>
+                                            
+                                            <a href="/list.html?cat=334">DW</a>
+                                            
+                                            <a href="/list.html?cat=335">卡西欧</a>
+                                            
+                                            <a href="/list.html?cat=336">西铁城</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">珠宝首饰 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=337">黄金</a>
+                                            
+                                            <a href="/list.html?cat=338">K金</a>
+                                            
+                                            <a href="/list.html?cat=339">时尚饰品</a>
+                                            
+                                            <a href="/list.html?cat=340">钻石</a>
+                                            
+                                            <a href="/list.html?cat=341">翡翠玉石</a>
+                                            
+                                            <a href="/list.html?cat=342">银饰</a>
+                                            
+                                            <a href="/list.html?cat=343">水晶玛瑙</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">男鞋</a>
+                                    
+                                    <a href="http://www.itcast.cn">运动</a>
+                                    
+                                    <a href="http://www.itcast.cn">户外</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">流行男鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=344">休闲鞋</a>
+                                            
+                                            <a href="/list.html?cat=345">商务休闲鞋</a>
+                                            
+                                            <a href="/list.html?cat=346">正装鞋</a>
+                                            
+                                            <a href="/list.html?cat=347">帆布鞋</a>
+                                            
+                                            <a href="/list.html?cat=348">凉鞋</a>
+                                            
+                                            <a href="/list.html?cat=352">帆布鞋</a>
+                                            
+                                            <a href="/list.html?cat=353">板鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">运动鞋包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=349">跑步鞋</a>
+                                            
+                                            <a href="/list.html?cat=350">休闲鞋</a>
+                                            
+                                            <a href="/list.html?cat=351">篮球鞋</a>
+                                            
+                                            <a href="/list.html?cat=354">拖鞋</a>
+                                            
+                                            <a href="/list.html?cat=355">运动包</a>
+                                            
+                                            <a href="/list.html?cat=356">足球鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">运动服饰 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=357">T恤</a>
+                                            
+                                            <a href="/list.html?cat=358">运动套装</a>
+                                            
+                                            <a href="/list.html?cat=359">运动裤</a>
+                                            
+                                            <a href="/list.html?cat=360">卫衣</a>
+                                            
+                                            <a href="/list.html?cat=361">夹克</a>
+                                            
+                                            <a href="/list.html?cat=362">羽绒服</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">健身训练 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=363">跑步机</a>
+                                            
+                                            <a href="/list.html?cat=364">动感单车</a>
+                                            
+                                            <a href="/list.html?cat=365">健身车</a>
+                                            
+                                            <a href="/list.html?cat=366">椭圆机</a>
+                                            
+                                            <a href="/list.html?cat=367">综合训练器</a>
+                                            
+                                            <a href="/list.html?cat=368">划船机</a>
+                                            
+                                            <a href="/list.html?cat=369">甩脂机</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">骑行运动 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=370">山地车</a>
+                                            
+                                            <a href="/list.html?cat=371">公路车</a>
+                                            
+                                            <a href="/list.html?cat=372">折叠车</a>
+                                            
+                                            <a href="/list.html?cat=373">骑行服</a>
+                                            
+                                            <a href="/list.html?cat=374">电动车</a>
+                                            
+                                            <a href="/list.html?cat=375">电动滑板车</a>
+                                            
+                                            <a href="/list.html?cat=377">羽毛球</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">体育用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=376">乒乓球</a>
+                                            
+                                            <a href="/list.html?cat=378">篮球</a>
+                                            
+                                            <a href="/list.html?cat=379">足球</a>
+                                            
+                                            <a href="/list.html?cat=380">轮滑滑板</a>
+                                            
+                                            <a href="/list.html?cat=381">网球</a>
+                                            
+                                            <a href="/list.html?cat=382">高尔夫</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">户外鞋服 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=383">户外风衣</a>
+                                            
+                                            <a href="/list.html?cat=384">徒步鞋</a>
+                                            
+                                            <a href="/list.html?cat=385">T恤</a>
+                                            
+                                            <a href="/list.html?cat=386">冲锋衣裤</a>
+                                            
+                                            <a href="/list.html?cat=387">速干衣裤</a>
+                                            
+                                            <a href="/list.html?cat=388">越野跑鞋</a>
+                                            
+                                            <a href="/list.html?cat=389">滑雪服</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">户外装备 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=390">背包</a>
+                                            
+                                            <a href="/list.html?cat=391">帐篷</a>
+                                            
+                                            <a href="/list.html?cat=392">望远镜</a>
+                                            
+                                            <a href="/list.html?cat=393">烧烤用具</a>
+                                            
+                                            <a href="/list.html?cat=394">编写桌椅床</a>
+                                            
+                                            <a href="/list.html?cat=395">户外配饰</a>
+                                            
+                                            <a href="/list.html?cat=396">军迷用品</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">房产</a>
+                                    
+                                    <a href="http://www.itcast.cn">汽车</a>
+                                    
+                                    <a href="http://www.itcast.cn">汽车用品</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">房产 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=397">最新开盘</a>
+                                            
+                                            <a href="/list.html?cat=398">普通住宅</a>
+                                            
+                                            <a href="/list.html?cat=399">别墅</a>
+                                            
+                                            <a href="/list.html?cat=400">商业办公</a>
+                                            
+                                            <a href="/list.html?cat=401">海外房产</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">汽车车型 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=402">微型车</a>
+                                            
+                                            <a href="/list.html?cat=403">小型车</a>
+                                            
+                                            <a href="/list.html?cat=404">紧凑型车</a>
+                                            
+                                            <a href="/list.html?cat=405">中型车</a>
+                                            
+                                            <a href="/list.html?cat=406">中大行车</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">维修保养 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=407">机油</a>
+                                            
+                                            <a href="/list.html?cat=408">轮胎</a>
+                                            
+                                            <a href="/list.html?cat=409">添加剂</a>
+                                            
+                                            <a href="/list.html?cat=410">防冻液</a>
+                                            
+                                            <a href="/list.html?cat=411">滤清器</a>
+                                            
+                                            <a href="/list.html?cat=412">蓄电池</a>
+                                            
+                                            <a href="/list.html?cat=413">雨刷</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">汽车装饰 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=414">座垫座套</a>
+                                            
+                                            <a href="/list.html?cat=415">脚垫</a>
+                                            
+                                            <a href="/list.html?cat=416">头枕腰靠</a>
+                                            
+                                            <a href="/list.html?cat=417">方向盘套</a>
+                                            
+                                            <a href="/list.html?cat=418">后备箱垫</a>
+                                            
+                                            <a href="/list.html?cat=419">车载支架</a>
+                                            
+                                            <a href="/list.html?cat=420">挂件摆件</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">车载电器 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=421">行车记录仪</a>
+                                            
+                                            <a href="/list.html?cat=422">车载充电器</a>
+                                            
+                                            <a href="/list.html?cat=423">车机导航</a>
+                                            
+                                            <a href="/list.html?cat=424">车载蓝牙</a>
+                                            
+                                            <a href="/list.html?cat=425">智能驾驶</a>
+                                            
+                                            <a href="/list.html?cat=426">车载净化器</a>
+                                            
+                                            <a href="/list.html?cat=427">车载吸尘器</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">安全自驾 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=428">胎压监测</a>
+                                            
+                                            <a href="/list.html?cat=429">充气泵</a>
+                                            
+                                            <a href="/list.html?cat=430">灭火器</a>
+                                            
+                                            <a href="/list.html?cat=431">车载床</a>
+                                            
+                                            <a href="/list.html?cat=432">应急救援</a>
+                                            
+                                            <a href="/list.html?cat=433">防盗设备</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">母婴</a>
+                                    
+                                    <a href="http://www.itcast.cn">玩具乐器</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">奶粉 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=434">1段</a>
+                                            
+                                            <a href="/list.html?cat=435">2段</a>
+                                            
+                                            <a href="/list.html?cat=436">3段</a>
+                                            
+                                            <a href="/list.html?cat=437">4段</a>
+                                            
+                                            <a href="/list.html?cat=438">孕妈奶粉</a>
+                                            
+                                            <a href="/list.html?cat=439">有机奶粉</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">营养辅食 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=440">米粉</a>
+                                            
+                                            <a href="/list.html?cat=441">面条</a>
+                                            
+                                            <a href="/list.html?cat=442">果泥</a>
+                                            
+                                            <a href="/list.html?cat=443">益生菌</a>
+                                            
+                                            <a href="/list.html?cat=444">DHA</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">尿裤湿斤 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=445">NB</a>
+                                            
+                                            <a href="/list.html?cat=446">S</a>
+                                            
+                                            <a href="/list.html?cat=447">M</a>
+                                            
+                                            <a href="/list.html?cat=448">L</a>
+                                            
+                                            <a href="/list.html?cat=449">XL</a>
+                                            
+                                            <a href="/list.html?cat=450">XXL</a>
+                                            
+                                            <a href="/list.html?cat=451">拉拉裤</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">玩具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=452">遥控电动</a>
+                                            
+                                            <a href="/list.html?cat=453">益智玩具</a>
+                                            
+                                            <a href="/list.html?cat=454">积木拼插</a>
+                                            
+                                            <a href="/list.html?cat=455">动漫玩具</a>
+                                            
+                                            <a href="/list.html?cat=456">毛绒布艺</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">乐器 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=457">钢琴</a>
+                                            
+                                            <a href="/list.html?cat=458">电钢琴</a>
+                                            
+                                            <a href="/list.html?cat=459">电子琴</a>
+                                            
+                                            <a href="/list.html?cat=460">吉他</a>
+                                            
+                                            <a href="/list.html?cat=461">尤克里里</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">食品</a>
+                                    
+                                    <a href="http://www.itcast.cn">酒类</a>
+                                    
+                                    <a href="http://www.itcast.cn">生鲜</a>
+                                    
+                                    <a href="http://www.itcast.cn">特产</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">新鲜水果 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=462">苹果</a>
+                                            
+                                            <a href="/list.html?cat=463">香蕉</a>
+                                            
+                                            <a href="/list.html?cat=464">梨</a>
+                                            
+                                            <a href="/list.html?cat=465">橙子</a>
+                                            
+                                            <a href="/list.html?cat=466">奇异果</a>
+                                            
+                                            <a href="/list.html?cat=467">火龙果</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">蔬菜蛋品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=468">蛋品</a>
+                                            
+                                            <a href="/list.html?cat=469">叶菜类</a>
+                                            
+                                            <a href="/list.html?cat=470">根茎类</a>
+                                            
+                                            <a href="/list.html?cat=471">葱姜蒜椒</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">精选肉类 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=472">猪肉</a>
+                                            
+                                            <a href="/list.html?cat=473">牛肉</a>
+                                            
+                                            <a href="/list.html?cat=474">羊肉</a>
+                                            
+                                            <a href="/list.html?cat=475">鸡肉</a>
+                                            
+                                            <a href="/list.html?cat=476">鸭肉</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">中外名酒 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=477">白酒</a>
+                                            
+                                            <a href="/list.html?cat=478">葡萄酒</a>
+                                            
+                                            <a href="/list.html?cat=479">洋酒</a>
+                                            
+                                            <a href="/list.html?cat=480">啤酒</a>
+                                            
+                                            <a href="/list.html?cat=481">黄酒</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">海鲜水产 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=482">鱼类</a>
+                                            
+                                            <a href="/list.html?cat=483">虾类</a>
+                                            
+                                            <a href="/list.html?cat=484">蟹类</a>
+                                            
+                                            <a href="/list.html?cat=485">贝类</a>
+                                            
+                                            <a href="/list.html?cat=486">海参</a>
+                                            
+                                            <a href="/list.html?cat=487">鱿鱼</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">冷饮冻食 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=488">水饺</a>
+                                            
+                                            <a href="/list.html?cat=489">汤圆</a>
+                                            
+                                            <a href="/list.html?cat=490">面点</a>
+                                            
+                                            <a href="/list.html?cat=491">烘培半成品</a>
+                                            
+                                            <a href="/list.html?cat=492">方便速食</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">地方特产 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=493">华北</a>
+                                            
+                                            <a href="/list.html?cat=494">华东</a>
+                                            
+                                            <a href="/list.html?cat=495">华南</a>
+                                            
+                                            <a href="/list.html?cat=496">华中</a>
+                                            
+                                            <a href="/list.html?cat=497">东北</a>
+                                            
+                                            <a href="/list.html?cat=498">西北</a>
+                                            
+                                            <a href="/list.html?cat=499">西南</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">图书</a>
+                                    
+                                    <a href="http://www.itcast.cn">音像</a>
+                                    
+                                    <a href="http://www.itcast.cn">电子书</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">少儿 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=500">0-2岁</a>
+                                            
+                                            <a href="/list.html?cat=501">3-6岁</a>
+                                            
+                                            <a href="/list.html?cat=502">7-10岁</a>
+                                            
+                                            <a href="/list.html?cat=503">11-14岁</a>
+                                            
+                                            <a href="/list.html?cat=504">儿童文艺</a>
+                                            
+                                            <a href="/list.html?cat=505">绘本</a>
+                                            
+                                            <a href="/list.html?cat=506">科普</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">教育 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=507">教材</a>
+                                            
+                                            <a href="/list.html?cat=508">中小学教辅</a>
+                                            
+                                            <a href="/list.html?cat=509">考试</a>
+                                            
+                                            <a href="/list.html?cat=510">外语学习</a>
+                                            
+                                            <a href="/list.html?cat=511">字典词典</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">文艺 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=512">小说</a>
+                                            
+                                            <a href="/list.html?cat=513">文学</a>
+                                            
+                                            <a href="/list.html?cat=514">青春文学</a>
+                                            
+                                            <a href="/list.html?cat=515">传记</a>
+                                            
+                                            <a href="/list.html?cat=516">动漫</a>
+                                            
+                                            <a href="/list.html?cat=517">艺术</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">科技 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=526">计算机与互联网</a>
+                                            
+                                            <a href="/list.html?cat=527">科普</a>
+                                            
+                                            <a href="/list.html?cat=528">建筑</a>
+                                            
+                                            <a href="/list.html?cat=529">工业技术</a>
+                                            
+                                            <a href="/list.html?cat=530">电子通信</a>
+                                            
+                                            <a href="/list.html?cat=531">医学</a>
+                                            
+                                            <a href="/list.html?cat=532">农林</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">音像 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=518">音乐</a>
+                                            
+                                            <a href="/list.html?cat=519">影视</a>
+                                            
+                                            <a href="/list.html?cat=520">教育音像</a>
+                                            
+                                            <a href="/list.html?cat=521">游戏</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">电子书 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=522">小说</a>
+                                            
+                                            <a href="/list.html?cat=523">励志与成功</a>
+                                            
+                                            <a href="/list.html?cat=524">经济金融</a>
+                                            
+                                            <a href="/list.html?cat=525">文学</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                            <li>
+                                <div class="level1">
+                                    
+                                    <a href="http://www.itcast.cn">机票</a>
+                                    
+                                    <a href="http://www.itcast.cn">酒店</a>
+                                    
+                                    <a href="http://www.itcast.cn">旅游</a>
+                                    
+                                    <a href="http://www.itcast.cn">生活</a>
+                                    
+                                </div>
+                                <div class="level2">
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">交通出行 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=533">国内机票</a>
+                                            
+                                            <a href="/list.html?cat=534">国际机票</a>
+                                            
+                                            <a href="/list.html?cat=535">火车票</a>
+                                            
+                                            <a href="/list.html?cat=536">机场服务</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">酒店预订 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=537">国内酒店</a>
+                                            
+                                            <a href="/list.html?cat=538">国际酒店</a>
+                                            
+                                            <a href="/list.html?cat=539">超值精选酒店</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">旅游度假 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=540">国内旅游</a>
+                                            
+                                            <a href="/list.html?cat=541">出境旅游</a>
+                                            
+                                            <a href="/list.html?cat=542">景点门票</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">演出票务 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=543">电影选座</a>
+                                            
+                                            <a href="/list.html?cat=544">演唱会</a>
+                                            
+                                            <a href="/list.html?cat=545">音乐会</a>
+                                            
+                                            <a href="/list.html?cat=546">话剧歌剧</a>
+                                            
+                                            <a href="/list.html?cat=547">体育赛事</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活缴费 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=548">水费</a>
+                                            
+                                            <a href="/list.html?cat=549">电费</a>
+                                            
+                                            <a href="/list.html?cat=550">煤气费</a>
+                                            
+                                            <a href="/list.html?cat=551">城市通</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活服务 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                            <a href="/list.html?cat=552">家政保洁</a>
+                                            
+                                            <a href="/list.html?cat=553">摄影写真</a>
+                                            
+                                            <a href="/list.html?cat=554">养生</a>
+                                            
+                                            <a href="/list.html?cat=555">代理代办</a>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+                    <ul class="navlist fl">
+                        <li><a href="">首页</a></li>
+                        <li class="interval">|</li>
+                        <li><a href="">真划算</a></li>
+                        <li class="interval">|</li>
+                        <li><a href="">抽奖</a></li>
+                    </ul>
+                </div>
+            </div>
+
+    <div class="breadcrumb">
+        <a href="http://shouji.jd.com">手机</a>
+        <span>></span>
+        <span>手机通讯</span>
+        <span>></span>
+        <a href="/list.html?cat=115">手机</a>
+    </div>
+
+    <div class="goods_detail_con clearfix">
+        <div class="goods_detail_pic fl"><img src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRdICAO_CRAAcPaeOqMpA2024091"></div>
+        <div class="goods_detail_list fr">
+            <h3>华为 HUAWEI P10 Plus 6GB+64GB 钻雕蓝 移动联通电信4G手机 双卡双待</h3>
+            <p>wifi双天线设计！徕卡人像摄影！P10徕卡双摄拍照，低至2988元！</p>
+            <div class="prize_bar">
+                <span class="show_pirze">¥<em>3388.00</em></span><span> 市场价￥3488.00</span>
+                <a href="javascript:;" class="goods_judge">0人评价</a>
+            </div>
+            <div class="goods_num clearfix">
+                <div class="num_name fl">数 量：</div>
+                <div class="num_add fl">
+                    <input v-model="sku_count" type="text" class="num_show fl">
+                    <a @click="sku_count++" class="add fr">+</a>
+                    <a @click="on_minus()" class="minus fr">-</a>
+                </div>
+            </div>
+            
+            <div class="type_select">
+                <label>颜色:</label>
+                
+                
+                <a href="/goods/9.html">钻雕金</a>
+                
+                
+                
+                <a href="javascript:;" class="select">钻雕蓝</a>
+                
+                
+                
+                <a href="/goods/13.html">玫瑰金</a>
+                
+                
+                
+                <a href="/goods/15.html">曜石黑</a>
+                
+                
+            </div>
+            
+            <div class="type_select">
+                <label>版本:</label>
+                
+                
+                <a href="javascript:;" class="select">64GB</a>
+                
+                
+                
+                <a href="/goods/11.html">128GB</a>
+                
+                
+            </div>
+            
+            <div class="total">总价：<em>[[sku_amount]]元</em></div>
+            <div class="operate_btn">
+                <a @click="add_cart" class="add_cart" id="add_cart">加入购物车</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl clearfix">
+            <div class="new_goods">
+                <h3>热销排行</h3>
+                <ul>
+                    <li v-for="sku in hots">
+                        <a :href="sku.url"><img :src="sku.default_image_url"></a>
+                        <h4><a :href="sku.url">[[sku.name]]</a></h4>
+                        <div class="prize">￥[[sku.price]]</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="r_wrap fr clearfix">
+            <ul class="detail_tab clearfix">
+                <li @click="on_tab_content('detail')" :class="tab_content.detail?'active':''">商品详情</li>
+                <li @click="on_tab_content('pack')" :class="tab_content.pack?'active':''">规格与包装</li>
+                <li @click="on_tab_content('comment')" :class="tab_content.comment?'active':''">商品评价([[comments.length]])</li>
+                <li @click="on_tab_content('service')" :class="tab_content.service?'active':''">售后服务</li>
+            </ul>
+            <div @click="on_tab_content('detail')" class="tab_content" :class="tab_content.detail?'current':''">
+                <dl>
+                    <dt>商品详情：</dt>
+                    <dd><p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRb2yAJ0cWADV9oDHhgG06294506" style="height:10460px; width:750px" /></p></dd>
+                </dl>
+            </div>
+            <div @click="on_tab_content('pack')" class="tab_content" :class="tab_content.pack?'current':''">
+                <dl>
+                    <dt>规格与包装：</dt>
+                    <dd><h3>包装清单</h3>
+
+<p>手机（含内置电池） x 1、大电流华为SuperCharge充电器 x 1、 USB数据线 x 1、半入耳式线控耳机 x 1、快速指南 x 1、三包凭证 x 1、取卡针 x 1、保护壳 x 1</p></dd>
+                </dl>
+            </div>
+            <div @click="on_tab_content('comment')" class="tab_content" :class="tab_content.comment?'current':''">
+                <ul class="judge_list_con">
+                    <li class="judge_list fl" v-for="comment in comments">
+                        <div class="user_info fl">
+                            <b>[[comment.username]]</b>
+                        </div>
+                        <div class="judge_info fl">
+                            <div :class="comment.score_class"></div>
+                            <div class="judge_detail">[[comment.comment]]</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div @click="on_tab_content('service')" class="tab_content" :class="tab_content.service?'current':''">
+                <dl>
+                    <dt>售后服务：</dt>
+                    <dd><p>&nbsp;<strong>厂家服务</strong></p>
+
+<p>本产品全国联保，享受三包服务，质保期为：一年质保<br />
+如因质量问题或故障，凭厂商维修中心或特约维修点的质量检测证明，享受7日内退货，15日内换货，15日以上在质保期内享受免费保修等三包服务！<br />
+(注:如厂家在商品介绍中有售后保障的说明,则此商品按照厂家说明执行售后保障服务。) 您可以查询本品牌在各地售后服务中心的联系方式，<a href="http://www.huawei.com/cn/" target="_blank">请点击这儿查询......</a><br />
+<br />
+品牌官方网站：<a href="http://www.huawei.com/cn/" target="_blank">http://www.huawei.com/cn/</a><br />
+售后服务电话：400-830-8300</p>
+
+<p>&nbsp;<strong>京东承诺</strong></p>
+
+<p>京东平台卖家销售并发货的商品，由平台卖家提供发票和相应的售后服务。请您放心购买！<br />
+注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！</p>
+
+<p><strong>正品行货</strong></p>
+
+<p>京东商城向您保证所售商品均为正品行货，京东自营商品开具机打发票或电子发票。</p>
+
+<p><strong>全国联保</strong></p>
+
+<p>凭质保证书及京东商城发票，可享受全国联保服务（奢侈品、钟表除外；奢侈品、钟表由京东联系保修，享受法定三包售后服务），与您亲临商场选购的商品享受相同的质量保证。京东商城还为您提供具有竞争力的商品价格和<a href="https://help.jd.com/help/question-892.html" target="_blank">运费政策</a>，请您放心购买！&nbsp;<br />
+<br />
+注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解</p></dd>
+                </dl>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="foot_link">
+            <a href="#">关于我们</a>
+            <span>|</span>
+            <a href="#">联系我们</a>
+            <span>|</span>
+            <a href="#">招聘人才</a>
+            <span>|</span>
+            <a href="#">友情链接</a>
+        </div>
+        <p>CopyRight © 2016 北京闫氏集团 All Rights Reserved</p>
+        <p>电话：010-****888    京ICP备*******8号</p>
+    </div>
+    </div>
+    <script type="text/javascript">
+        var price = 3388.00;
+        var cat = 115;
+    </script>
+    <script type="text/javascript" src="/js/detail.js"></script>
+</body>
+</html>
