@@ -13,14 +13,18 @@ def generate_static_sku_detail_html(sku_id):
     """生成指定商品的静态详情页面"""
     # 1.从数据库中查询详情页所需数据
     # 商品分类菜单
+    # 我们将具体的代码封装成了一个函数，直接进行调用即可
     categories = get_categories()
 
     # 获取当前sku的信息
     sku = SKU.objects.get(id=sku_id)
+    #  获取当前商品的图片，然后进行获取保存
     sku.images = sku.skuimage_set.all()
 
-    # 面包屑导航信息中的频道
+    # 找到和sku关联的频道
+    # 找到和sku关联的spu对象
     goods = sku.goods
+    # 先找到spu关联分类的一级分类，然后再找到和一级分类关联的频道，最终只有一个，我们取第一个就行了
     goods.channel = goods.category1.goodschannel_set.all()[0]
 
     # 构建当前商品的规格键

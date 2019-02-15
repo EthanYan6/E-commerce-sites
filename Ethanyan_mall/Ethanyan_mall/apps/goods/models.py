@@ -138,7 +138,7 @@ class SKU(BaseModel):
     def __str__(self):
         return '%s: %s' % (self.id, self.name)
 
-
+# sku.skuimage_set.all()
 class SKUImage(BaseModel):
     """
     SKU图片
