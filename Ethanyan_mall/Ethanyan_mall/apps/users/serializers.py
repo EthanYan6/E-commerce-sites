@@ -1,6 +1,9 @@
 import re
 from django_redis import get_redis_connection
 from rest_framework import serializers
+
+from goods.models import SKU
+from users import constants
 from users.models import User, Address
 
 
@@ -184,3 +187,38 @@ class AddressTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('title',)
+
+class HistorySerializer(serializers.Serializer):
+    """浏览记录序列化器类"""
+    sku_id = serializers.IntegerField(label='商品id',min_value=1)
+
+    def validate_sku_id(self,value):
+        # sku_id对应商品是否存在
+        try:
+            SKU.objects.get(id=value)
+        except SKU.DoesNotExist:
+            raise serializers.ValidationError('商品不存在')
+        return value
+
+    def create(self, validated_data):
+        """在redis中保存登录用户的浏览记录"""
+        # 获取redis链接
+        redis_conn = get_redis_connection('histories')
+
+        # 获取登录的用户
+        user = self.context['request'].user
+
+        history_key = 'history_%s' % user.id
+
+        sku_id = validated_data['sku_id']
+        # 1.去重：如果用户已经浏览过该商品，将商品的id从redis列表中移除
+        redis_conn.lrem(history_key, 0, sku_id)
+
+        # 2.保持有序：将用户最新浏览的商品id添加到列表的最左侧
+        redis_conn.lpush(history_key, sku_id)
+
+        # 3.截取：只保留用户最新浏览的几个商品的id
+        redis_conn.ltrim(history_key, 0, constants.USER_BROWSING_HISTORY_COUNTS_LIMIT - 1)
+
+
+        return validated_data

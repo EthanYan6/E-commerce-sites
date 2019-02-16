@@ -6,13 +6,36 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from users import constants
-from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer, AddressTitleSerializer
+from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer, AddressTitleSerializer, \
+    HistorySerializer
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin
 from users.serializers import EmailSerializer
 # Create your views here.
+
+# POST /browse_histories/
+class HistoryView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = HistorySerializer
+
+    def post(self,request):
+        """
+        浏览记录保存
+        1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
+        2.在redis中保存登录用户的浏览记录
+        3.返回应答，浏览记录保存成功
+        """
+        # 1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # 2.在redis中保存登录用户的浏览记录
+        serializer.save()
+
+        # 3.返回应答，浏览记录保存成功
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
     """地址视图集"""
