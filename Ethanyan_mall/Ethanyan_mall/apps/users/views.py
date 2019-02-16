@@ -4,7 +4,7 @@ from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIVie
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-
+from django_redis import  get_redis_connection
 from users import constants
 from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer, AddressTitleSerializer, \
     HistorySerializer
@@ -13,6 +13,8 @@ from users.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateModelMixin
 from users.serializers import EmailSerializer
+from goods.models import SKU
+from goods.serializers import SKUSerializer
 # Create your views here.
 
 # POST /browse_histories/
@@ -36,6 +38,35 @@ class HistoryView(CreateAPIView):
     #
     #     # 3.返回应答，浏览记录保存成功
     #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self,request):
+        """
+        浏览记录获取
+        1.从redis中获取用户浏览的商品的id
+        2.根据商品的id获取对应的数据
+        3.将商品的数据序列化并返回
+        """
+        user = request.user
+
+        # 1.从redis中获取用户浏览的商品的id
+        # 获取redis链接
+        redis_conn = get_redis_connection('histories')
+
+        history_key = 'history_%s' % user.id
+
+        # [b'<sku_id>',b'<sku_id>',....]
+        sku_ids = redis_conn.lrange(history_key, 0, -1)
+
+
+        # 2.根据商品的id获取对应的数据
+        skus = []
+
+        for sku_id in sku_ids:
+            sku = SKU.objects.get(id=sku_id) # get(id='1')get(id='1')get(id=b'1')
+            skus.append(sku)
+        # 3.将商品的数据序列化并返回
+        serializer = SKUSerializer(skus,many=True)
+        return Response(serializer.data)
 
 class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
     """地址视图集"""
