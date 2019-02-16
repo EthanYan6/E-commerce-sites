@@ -16,26 +16,26 @@ from users.serializers import EmailSerializer
 # Create your views here.
 
 # POST /browse_histories/
-class HistoryView(GenericAPIView):
+class HistoryView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = HistorySerializer
 
-    def post(self,request):
-        """
-        浏览记录保存
-        1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
-        2.在redis中保存登录用户的浏览记录
-        3.返回应答，浏览记录保存成功
-        """
-        # 1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        # 2.在redis中保存登录用户的浏览记录
-        serializer.save()
-
-        # 3.返回应答，浏览记录保存成功
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    # def post(self,request):
+    #     """
+    #     浏览记录保存
+    #     1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
+    #     2.在redis中保存登录用户的浏览记录
+    #     3.返回应答，浏览记录保存成功
+    #     """
+    #     # 1.获取sku_id并进行校验（sku_id必传，sku_id对应的商品是否存在）
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #
+    #     # 2.在redis中保存登录用户的浏览记录
+    #     serializer.save()
+    #
+    #     # 3.返回应答，浏览记录保存成功
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class AddressViewSet(CreateModelMixin,UpdateModelMixin,GenericViewSet):
     """地址视图集"""
