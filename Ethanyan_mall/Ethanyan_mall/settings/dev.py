@@ -174,7 +174,8 @@ CACHES = {
     # 保存用户浏览记录
     "histories": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/3",
+        # celery中我们使用了3号库，这里修改为4
+        "LOCATION": "redis://127.0.0.1:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
