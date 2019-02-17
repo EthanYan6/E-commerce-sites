@@ -256,6 +256,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    # 全局分页设置
+    'DEFAULT_PAGINATION_CLASS': 'Ethanyan_mall.utils.pagination.StandardResultPagination',
 }
 # JWT扩展配置
 JWT_AUTH = {

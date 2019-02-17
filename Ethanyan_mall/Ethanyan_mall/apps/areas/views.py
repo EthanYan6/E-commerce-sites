@@ -13,6 +13,9 @@ from areas.serializers import AreaSerializer, SubAreaSerializer
 # retrieve
 class AreasViewSet(CacheResponseMixin,ReadOnlyModelViewSet):
     """地区视图集"""
+
+    # 关闭分页
+    pagination_class = None
     def get_serializer_class(self):
         if self.action == 'list':
             return AreaSerializer
