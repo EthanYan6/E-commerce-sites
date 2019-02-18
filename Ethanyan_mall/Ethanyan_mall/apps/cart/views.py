@@ -18,7 +18,82 @@ class CartView(APIView):
     def perform_authentication(self, request):
         """让当前视图跳过DRF框架认证过程"""
         pass
+    # PUT /cart/
+    def put(self,request):
+        """
+        购物车记录修改：
+        1.获取参数并进行校验（参数完整性，sku_id商品是否存在，商品的库存）
+        2.修改用户的购物车记录
+            2.1如果用户已登录，修改redis中对应的购物车记录
+            2.2如果用户未登录，修改cookie中对应的购物车记录
+        3.返回应答，购物车记录修改成功
+        """
+        # 1.获取参数并进行校验（参数完整性，sku_id商品是否存在，商品的库存）
+        serializer = CartSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        # 获取校验之后的数据
+        sku_id = serializer.validated_data['sku_id']
+        count = serializer.validated_data['count']
+        selected = serializer.validated_data['selected']
 
+        # 获取User
+        try:
+            # 调用request.user 会触发DRF框架认证过程
+            user = request.user
+        except Exception:
+            user = None
+        # 2.修改用户的购物车记录
+        if user and user.is_authenticated:
+            # 2.1如果用户已登录，修改redis中对应的购物车记录
+            #获取redis链接
+            redis_conn = get_redis_connection('cart')
+
+            # 修改redis hash中商品id对应数量count
+            cart_key = 'cart_%s' % user.id
+            redis_conn.hset(cart_key, sku_id, count)
+
+            # 修改redis set勾选的商品id
+            cart_selected_key = 'cart_selected_%s' % user.id
+
+            if selected:
+                # 勾选
+                redis_conn.sadd(cart_selected_key, sku_id)
+            else:
+                # 取消勾选
+                redis_conn.srem(cart_selected_key, sku_id)
+            return Response(serializer.validated_data)
+        else:
+            # 2.2如果用户未登录，修改cookie中对应的购物车记录
+            response = Response(serializer.validated_data)
+
+            # 获取cookie中的购物车数据
+            cookie_cart = request.COOKIES.get('cart')
+
+            if cookie_cart is None:
+                return response
+            # 解析cookie中的购物车数据
+            # {
+            #     '<sku_id>': {
+            #         'count': '<count>',
+            #         'selected': '<selected>'
+            #     },
+            #     ...
+            # }
+            cart_dict = pickle.loads(base64.b64encode(cookie_cart))
+
+            if not cart_dict:
+                # 字典为空
+                return response
+
+            # 修改购物车数据
+            cart_dict[sku_id] = {
+                'count':count,
+                'selected':selected
+            }
+            # 3.返回应答，购物车记录修改成功
+            cart_data = base64.b64encode(pickle.dumps(cart_dict)).decode()
+            response.set_cookie('cart',cart_data,max_age=constants.CART_COOKIE_EXPIRES)
+            return response
     # POST /cart/
     def post(self,request):
         """
