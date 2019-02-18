@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cart import constants
-from cart.serializers import CartSerializer, CartSKUSerializer
+from cart.serializers import CartSerializer, CartSKUSerializer, CartDelSerializer
 from goods.models import SKU
 
 
@@ -18,6 +18,64 @@ class CartView(APIView):
     def perform_authentication(self, request):
         """让当前视图跳过DRF框架认证过程"""
         pass
+
+    # DELETE /cart/
+    def delete(self,request):
+        """
+        # 购物车记录删除
+        1.获取商品sku_id并进行校验（sku_id必传，sku_id对应商品是否存在）
+        2.删除用户的浏览记录：
+            2.1如果用户已登录，删除redis中对应的购物车记录
+            2.2如果用户未登录，删除cookie中对应的购物车记录
+        3.返回应答，鬼屋车记录删除成功
+        """
+        # 1.获取商品sku_id并进行校验（sku_id必传，sku_id对应商品是否存在）
+        serializer = CartDelSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # 获取校验之后的数据
+        sku_id = serializer.validated_data['sku_id']
+
+        try:
+            user = request.user
+        except Exception:
+            user = None
+
+        # 2.删除用户的浏览记录：
+        if user and user.is_authenticated:
+            # 2.1如果用户已登录，删除redis中对应的购物车记录
+            # 获取redis链接
+            redis_conn = get_redis_connection('cart')
+
+            # 从redis hash删除对应商品的id和数量count
+            cart_key = 'cart_%s' % user.id
+            redis_conn.hdel(cart_key, sku_id)
+
+            # 从redis set中删除对应的商品的id
+            cart_selected_key = 'cart_selected_%s' % user.id
+            redis_conn.srem(cart_selected_key, sku_id)
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            # 2.2如果用户未登录，删除cookie中对应的购物车记录
+            response = Response(status=status.HTTP_204_NO_CONTENT)
+            # 获取cookie中的购物车记录
+            cookie_cart = request.COOKIES.get('cart')
+
+            if cookie_cart is None:
+                # 购物车无数据
+                return response
+            cart_dict = pickle.loads(base64.b64decode(cookie_cart))
+
+            # 删除对应的购物车记录
+            if sku_id in cart_dict:
+                del cart_dict[sku_id]
+                # 重新设置cookie购物车数据
+                cart_data = base64.b64encode(pickle.dumps(cart_dict)).decode()
+                response.set_cookie('cart', cart_data, max_age=constants.CART_COOKIE_EXPIRES)
+            # 3.返回应答，鬼屋车记录删除成功
+            return response
+
     # PUT /cart/
     def put(self,request):
         """
