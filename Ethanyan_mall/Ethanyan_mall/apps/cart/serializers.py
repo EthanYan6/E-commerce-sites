@@ -47,3 +47,7 @@ class CartDelSerializer(serializers.Serializer):
             raise serializers.ValidationError('商品不存在')
 
         return value
+
+class CartSelectSerializer(serializers.Serializer):
+    """购物车记录全选的序列化器类"""
+    selected = serializers.BooleanField(label='勾选状态')

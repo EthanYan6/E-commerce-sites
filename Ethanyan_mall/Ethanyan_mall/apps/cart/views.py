@@ -10,8 +10,60 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cart import constants
-from cart.serializers import CartSerializer, CartSKUSerializer, CartDelSerializer
+from cart.serializers import CartSerializer, CartSKUSerializer, CartDelSerializer, CartSelectSerializer
 from goods.models import SKU
+
+
+# PUT /cart/selection/
+class CartSelectAllView(APIView):
+    def perform_authentication(self, request):
+        """让当前视图跳转DRF框架默认认证过程"""
+        pass
+    def put(self,request):
+        """
+        购物车记录全选和取消全选
+        # 1.获取参数selected并进行校验（selected必传）
+        # 2.设置用户购物车记录勾选状态
+        #     2.1如果用户已登录，设置redis中用户购物车记录勾选状态。
+        #     2.2如果用户未登录，设置cookie中用户购物车记录勾选状态。
+        # 3.返回应答，设置成功
+        """
+        # 1.获取参数selected并进行校验（selected必传）
+        serializer = CartSelectSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # 获取校验之后的selected
+        selected = serializer.validated_data['selected'] # True全选，False全不选
+
+        try:
+            # request.user会触发DRF框架认证过程
+            user = request.user
+        except Exception:
+            user = None
+
+        # 2.设置用户购物车记录勾选状态
+        if user and user.is_authenticated:
+            # 2.1如果用户已登录，设置redis中用户购物车记录勾选状态。
+            # 获取redis链接
+            redis_conn = get_redis_connection('cart')
+            # 从redis hash中获取用户购物车中所有商品的id
+            cart_key = 'cart_%s' % user.id
+            sku_ids = redis_conn.hkeys(cart_key)
+
+            cart_selected_key = 'cart_selected_%s' % user.id
+
+            if selected:
+                # 全选：将用户购物车所有商品的id添加时到redis set中
+                redis_conn.sadd(cart_selected_key, *sku_ids)
+            else:
+                # 全不选：将用户购物车所有商品的id从redis set中移除
+                redis_conn.srem(cart_selected_key, *sku_ids)
+            return  Response({'message':'OK'})
+
+        else:
+            # 2.2如果用户未登录，设置cookie中用户购物车记录勾选状态。
+        # 3.返回应答，设置成功
+            pass
 
 
 class CartView(APIView):
