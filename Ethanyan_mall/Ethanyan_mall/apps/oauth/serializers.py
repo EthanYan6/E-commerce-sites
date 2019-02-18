@@ -83,7 +83,8 @@ class QQAuthUserSerializer(serializers.ModelSerializer):
             # 随机生成用户名
             username = base64.b64encode(os.urandom(10)).decode()
             user = User.objects.create_user(username=username,mobile=mobile,password=password)
-
+        # 给类视图对象增加属性User，保存绑定用户的数据
+        self.context['view'].user = user
         # 保存绑定用户数据
         openid = validated_data['openid']
         OAuthQQUser.objects.create(

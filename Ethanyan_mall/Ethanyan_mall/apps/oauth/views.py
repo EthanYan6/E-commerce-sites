@@ -1,17 +1,31 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from cart.utils import merge_cookie_cart_to_redis
 from oauth.exceptions import QQAPIError
 from oauth.models import OAuthQQUser
 from oauth.utils import OAuthQQ
 from oauth.serializers import QQAuthUserSerializer
 # Create your views here.
 # GET /oauth/qq/user/?code=<code>
+# class QQAuthUserView(CreateAPIView):
 class QQAuthUserView(GenericAPIView):
     serializer_class = QQAuthUserSerializer
+
+    # def post(self, request, *args, **kwargs):
+    #     # 调用CreateAPIView中的post完成绑定数据保存
+    #     response = super().create(request)
+    #
+    #
+    #     # 调用合并购物车记录函数
+    #     # 获取绑定用户
+    #     user = self.user
+    #     merge_cookie_cart_to_redis(request, user, response)
+    #
+    #     return response
+
     def post(self,request):
         """
         保存qq登录用户绑定数据
@@ -25,8 +39,14 @@ class QQAuthUserView(GenericAPIView):
 
         # 2.保存绑定用户的数据并签发jwt token
         serializer.save()
+
         # 3.返回应答，绑定成功
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
+        response =  Response(serializer.data,status=status.HTTP_201_CREATED)
+
+        # 调用合并购物车记录函数
+        user =self.user
+        merge_cookie_cart_to_redis(request, user, response)
+        return response
     def get(self,request):
         """
         获取QQ登录用户的openid并处理
@@ -80,7 +100,11 @@ class QQAuthUserView(GenericAPIView):
                 'username':user.username,
                 'token':token
             }
-            return Response(response_data)
+            response = Response(response_data)
+
+            # 调用合并购物车记录函数
+            merge_cookie_cart_to_redis(request, user,response)
+            return response
 
 
 # GET /oauth/qq/authorization/?next=<登录之后跳转页面的地址>
