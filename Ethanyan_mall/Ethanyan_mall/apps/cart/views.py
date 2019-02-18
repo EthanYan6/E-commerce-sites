@@ -62,8 +62,24 @@ class CartSelectAllView(APIView):
 
         else:
             # 2.2如果用户未登录，设置cookie中用户购物车记录勾选状态。
-        # 3.返回应答，设置成功
-            pass
+            # 获取cookie的购物车记录
+            cookie_cart = request.COOKIES.get('cart')
+
+            if cookie_cart:
+                cart_dict = pickle.loads(base64.b64decode(cookie_cart))
+            else:
+                cart_dict = {}
+
+            # 设置cookie购物车记录勾选状态
+            for sku_id, count_selected in cart_dict.items():
+                cart_dict[sku_id]['selected'] = selected
+
+            # 3.返回应答，设置成功
+            response = Response({'message':'OK'})
+            # 设置cookie中的购物车数据
+            cart_data = base64.b64encode(pickle.dumps(cart_dict)).decode()
+            response.set_cookie('cart', cart_data, max_age=constants.CART_COOKIE_EXPIRES)
+            return response
 
 
 class CartView(APIView):
@@ -189,7 +205,7 @@ class CartView(APIView):
             #     },
             #     ...
             # }
-            cart_dict = pickle.loads(base64.b64encode(cookie_cart))
+            cart_dict = pickle.loads(base64.b64decode(cookie_cart))
 
             if not cart_dict:
                 # 字典为空
@@ -260,7 +276,7 @@ class CartView(APIView):
                 # },
                 # ...
                 # }
-                cart_dict = pickle.loads(base64.b64encode(cookie_cart))
+                cart_dict = pickle.loads(base64.b64decode(cookie_cart))
             else:
                 cart_dict = {}
             # 保存购物车数据
