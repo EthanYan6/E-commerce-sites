@@ -52,7 +52,7 @@ class QQAuthUserSerializer(serializers.ModelSerializer):
         # 从redis中获取真是的短信验证码
         redis_conn = get_redis_connection('verify_codes')
         real_sms_code = redis_conn.get('sms_%s' % mobile) # bytes
-        if not real_sms_code:
+        if real_sms_code is None:
             raise serializers.ValidationError('短信验证码已经失效')
         # 对比短信验证码
         sms_code = attrs['sms_code'] # str
@@ -77,11 +77,11 @@ class QQAuthUserSerializer(serializers.ModelSerializer):
         # 如果手机号没有注册，先创建一个新用户
         user = validated_data['user']
 
-        if not user:
+        if user is None:
             mobile = validated_data['mobile']
             password = validated_data['password']
             # 随机生成用户名
-            username = base64.b64encode(os.urandom(10)).decode()
+            username = base64.b64encode(os.urandom(9)).decode()
             user = User.objects.create_user(username=username,mobile=mobile,password=password)
         # 给类视图对象增加属性User，保存绑定用户的数据
         self.context['view'].user = user
