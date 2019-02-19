@@ -4,14 +4,39 @@ from django_redis import get_redis_connection
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from goods.models import SKU
-from orders.serializers import OrderSKUSerializer
+from orders.serializers import OrderSKUSerializer,OrderSerializer
 # Create your views here.
 
 
+
+# POST /orders/
+class OrdersView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderSerializer
+
+    def post(self, request):
+        """
+        订单信息的保存
+        1.接收参数并进行校验（参数完整性，地址是否存在，支付方式是否合法）
+        2.创建并保存订单的数据
+        3.返回应答，订单创建成功
+        """
+        # 1.接收参数并进行校验（参数完整性，地址是否存在，支付方式是否合法）
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+
+        # 2.创建并保存订单的数据
+        serializer.save()
+
+        # 3.返回应答，订单创建成功
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+
 # GET /orders/settlement/
-class OrderSettlmentView(APIView):
+class OrderSettlementView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request):
