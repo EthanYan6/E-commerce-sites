@@ -35,7 +35,7 @@ class OrderSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        """创建并保存订单的数据"""
+        """创建并保存订单的数据:(悲观锁)"""
         # 获取address和pay_method
         address = validated_data['address']
         pay_method = validated_data['pay_method']
@@ -72,7 +72,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         with transaction.atomic():
             # with语句块下面的代码，凡是涉及到数据库操作的代码，在进行数据库操作时，都会放在同一个事务中
-
+            # 设置事务保存点
             sid = transaction.savepoint()
             try:
                 # 1.向订单基本信息表中添加一条记录
@@ -96,7 +96,15 @@ class OrderSerializer(serializers.ModelSerializer):
                     count = int(count)
 
                     # 根据sku_id获取商品的信息
-                    sku = SKU.objects.get(id=sku_id)
+                    # sku = SKU.objects.get(id=sku_id)
+                    # select * from tb_sku where id=<sku_id>;
+                    #  sku = SKU.objects.get(id=sku_id)
+
+                    # select * from tb_sku where id = <sku_id> for update;
+                    print('user: %s try get lock' % user.id)
+                    sku = SKU.objects.select_for_update().get(id=sku_id)
+                    print('user: %s get locked' % user.id)
+
 
                     # 判断商品的库存
                     if count > sku.stock:
@@ -104,6 +112,10 @@ class OrderSerializer(serializers.ModelSerializer):
                         transaction.savepoint_rollback(sid)
                         raise serializers.ValidationError('商品的库存不足')
 
+                    # 模拟订单并发的问题
+                    # print('user: %s' % user.id)
+                    import time
+                    time.sleep(10)
                     # 减少对应商品的库存，增加销量
                     sku.stock -= count
                     sku.sales += count
