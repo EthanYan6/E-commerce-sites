@@ -115,8 +115,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
                         # 模拟订单并发的问题
                         print('user: %s time: %s stock: %s' % (user.id, i, origin_stock))
-                        import time
-                        time.sleep(10)
+                        # import time
+                        # time.sleep(10)
                         # 减少对应商品的库存，增加销量
                         # update tb_sku
                         # set stock=<new_stock>, sales = <ne_sales>

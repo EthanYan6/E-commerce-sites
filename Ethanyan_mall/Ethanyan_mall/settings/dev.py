@@ -369,3 +369,8 @@ HAYSTACK_CONNECTIONS = {
 
 # 当添加、修改、删除数据时，自动生成索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 支付宝
+ALIPAY_APPID = "2016092600602671" # 开发应用appid
+ALIPAY_URL = "https://openapi.alipaydev.com/gateway.do" # 支付宝网关地址
+ALIPAY_DEBUG = True # 是否使用沙箱环境
