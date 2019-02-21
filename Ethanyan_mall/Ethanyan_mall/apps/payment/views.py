@@ -14,6 +14,63 @@ from orders.models import OrderInfo
 
 # Create your views here.
 
+# PUT /payment/status/?<支付结果数据>
+from payment.models import Payment
+
+
+class PaymentStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self,request):
+        """
+        保存支付结果
+        1.获取支付结果数据并进行签名认证
+        2.校验订单是否有效
+        3.保存支付结果并修改订单支付状态
+        4.返回支付交易编号
+        """
+        data = request.query_params.dict()
+
+        signature = data.pop('sign')
+
+        alipay = AliPay(
+            appid=settings.ALIPAY_APPID,  # 开发应用appid
+            app_notify_url=None,  # 默认回调url
+            app_private_key_path=os.path.join(settings.BASE_DIR, 'apps/payment/keys/app_private_key.pem'),
+            # 网站的私钥文件路径
+            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'apps/payment/keys/alipay_public_key.pem'),
+            # 支付宝公钥文件路径
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=settings.ALIPAY_DEBUG  # 默认False
+        )
+
+        success = alipay.verify(data, signature)
+
+        if not success:
+            return Response({'message':'非法操作'},status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            order = OrderInfo.objects.get(order_id=data.get('out_trade_no'),
+                                          user=request.user,
+                                          pay_method=OrderInfo.PAY_METHODS_ENUM['ALIPAY'],
+                                          status=OrderInfo.ORDER_STATUS_ENUM['UNPAID']
+                                          )
+        except OrderInfo.DoesNotExist:
+            return Response({'message': '无效的订单id'}, status=status.HTTP_400_BAD_REQUEST)
+
+        trade_id = data.get('trade_no')
+        Payment.objects.create(
+            order = order,
+            trade_id=trade_id
+        )
+
+        order.status = OrderInfo.ORDER_STATUS_ENUM['UNSEND']
+
+        order.save()
+
+        return Response({'trade_id':trade_id})
+
+
 
 
 # GET /orders/(?P<order_id>\d+)/payment/
