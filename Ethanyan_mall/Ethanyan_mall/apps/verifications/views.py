@@ -1,15 +1,29 @@
 import logging
 import random
 
+from django.http import HttpResponse
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
+from Ethanyan_mall.utils.captcha.captcha import captcha
 from verifications import constants
 
 logger = logging.getLogger('django')
+
+# GET /image_codes/(?P<image_code_id>\d+)/
+class ImageCodeView(APIView):
+    """图片验证码"""
+    def get(self,request,image_code_id):
+        # 生成验证码
+        name, text, image = captcha.generate_captcha()
+        redis_conn = get_redis_connection('image_codes')
+        redis_conn.setex('ImageCode_' + image_code_id, constants.IMAGE_CODE_REDIS_EXPIRES, text)
+        response = HttpResponse(image,content_type='image/jpg')
+        return response
+
+
 
 # GET /sms_codes/(?P<mobile>1[3-9]\d{9})/
 class SMSCodeView(APIView):

@@ -7,4 +7,7 @@ SEND_SMS_TEMP_ID = 1
 # 短信发送时间间隔
 SEND_SMS_CODE_INTERVAL = 60
 
+# 设置图片验证码有效期  单位s
+IMAGE_CODE_REDIS_EXPIRES = 300
+
 

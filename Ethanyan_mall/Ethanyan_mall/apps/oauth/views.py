@@ -69,7 +69,7 @@ class WeiboOauthView(APIView):
 
         # 5.判断是否绑定过美多账号
         try:
-            weibo_user = OAuthSinaUser.objects.get(weibotoken=weibotoken)
+            weibo_user = OAuthSinaUser.objects.get(access_token=weibotoken)
         except:
             # 6.未绑定,进入绑定页面,完成绑定
             tjs = TJWSSerializer(settings.SECRET_KEY, 300)

@@ -109,7 +109,7 @@ class WeiboOauthSerializers(serializers.ModelSerializer):
                                             password=validated_data['password'],
                                             mobile=validated_data['mobile'])
         # 绑定操作
-        OAuthSinaUser.objects.create(user=user, weibotoken=validated_data["weibotoken"])
+        OAuthSinaUser.objects.create(user=user, access_token=validated_data["weibotoken"])
         # user_id=user.id
         from rest_framework_jwt.settings import api_settings
         # 生成加密后的token数据

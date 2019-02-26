@@ -37,6 +37,12 @@
                                 <input type="password" v-model="password" v-on:blur="check_pwd" name="pwd" id="pwd">
                                 <span v-show="error_password" class="error_tip">密码最少8位，最长20位</span>
                             </li>
+                            <li>
+                                <label>图形验证码:</label>
+                                <input type="text" v-model="image_code" v-on:blur="check_image_code" name="pic_code" id="pic_code" class="msg_input">
+                                <img v-bind:src="image_code_url" v-on:click="generate_image_code" alt="图形验证码" class="pic_code">
+                                <span v-show="error_image_code" class="error_tip">{{ error_image_code_message }}</span>
+                            </li>
 
                             <li>
                                 <label>短信验证码:</label>
