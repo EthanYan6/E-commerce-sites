@@ -1,10 +1,53 @@
 import re
+
+
 from django_redis import get_redis_connection
 from rest_framework import serializers
 
 from goods.models import SKU
 from users import constants
 from users.models import User, Address
+
+
+class UserPasswordChangeSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(label='旧密码',write_only=True)
+    password2 = serializers.CharField(label='确认密码', write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id','password','old_password','password2')
+        extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'min_length': 8,
+                'max_length': 20,
+                'error_messages': {
+                    'min_length': '仅允许8-20个字符的密码',
+                    'max_length': '仅允许8-20个字符的密码',
+                }
+            }
+        }
+
+    def validate(self, attrs):
+        """
+        :param attrs: 字典，传入data数据
+        :return:
+        """
+        # 判断两次密码是否一致
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError('两次密码不一样，请仔细检查一下下...')
+        return attrs
+    def update(self, instance, validated_data):
+        old_password = validated_data['old_password']
+        user = User.objects.filter(id = instance.id).first()
+
+        if not user.check_password(old_password):
+            raise serializers.ValidationError('原密码输入错误')
+
+        user.set_password(validated_data['password'])
+        user.save()
+        return instance
+
 
 
 class UserSerializer(serializers.ModelSerializer):

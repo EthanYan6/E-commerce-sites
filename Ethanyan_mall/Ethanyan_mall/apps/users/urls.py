@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^email/$',views.EmailView.as_view()),
     url(r'^emails/verification/$',views.EmailVerifyView.as_view()),
     url(r'^browse_histories/$',views.HistoryView.as_view()),
+    url(r'^users/(?P<pk>\d+)/password/$',views.UserPasswordChangeView.as_view())
 
 ]
 

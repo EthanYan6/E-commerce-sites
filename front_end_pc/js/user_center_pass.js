@@ -64,7 +64,7 @@ var vm = new Vue({
                         if (error.response.status === 403) {
                             location = '/index.html?next=/user_center_pass.html';
                         } else {
-                            alert(error.response.data.message);
+                            alert('小老弟,你原密码写错了...');
                         }
                     })
             } else {

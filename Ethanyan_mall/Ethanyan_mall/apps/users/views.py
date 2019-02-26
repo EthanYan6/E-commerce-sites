@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from django_redis import  get_redis_connection
 from users import constants
 from users.serializers import UserSerializer, UserDetailSerializer, AddressSerializer, AddressTitleSerializer, \
-    HistorySerializer
+    HistorySerializer, UserPasswordChangeSerializer
 from users import serializers
 from users.models import User
 from rest_framework.permissions import IsAuthenticated
@@ -23,6 +23,29 @@ from rest_framework_jwt.views import ObtainJSONWebToken,jwt_response_payload_han
 from cart.utils import merge_cookie_cart_to_redis
 # Create your views here.
 
+
+# PUT /users/(?P<pk>\d+)/password/
+class UserPasswordChangeView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserPasswordChangeSerializer
+
+    def put(self,request,pk):
+        """
+        1.获取参数并校验，看原密码是否正确，两次密码是否一致。
+        2.获取当前用户信息，更新到数据库。
+        3.返回响应。
+        """
+        # 1.获取参数并校验，看原密码是否正确，两次密码是否一致。
+        user = request.user
+
+        # 2.获取参数并进行校验
+        serializer = self.get_serializer(user,data = request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # 3.保存修改地址的数据
+        serializer.save()
+        # 4.返回应答，修改成功
+        return Response({'message':'OK'})
 
 # POST /authorizations/
 class UserAuthorizeView(ObtainJSONWebToken):

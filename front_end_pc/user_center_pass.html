@@ -66,17 +66,17 @@
                         <div class="form_group">
                             <label>当前密码：</label>
                             <input v-model="old_pwd" v-on:blur="check_opwd" type="password" name="">
-							<span v-cloak v-show="error_opwd" class="error_tip">请填写当前密码</span>	
+							<span v-cloak v-show="error_opwd" class="error_tip">密码都不写,改毛线~~</span>
                         </div>
                         <div class="form_group">
                             <label>新密码：</label>
 							<input v-model="new_pwd" v-on:blur="check_pwd" type="password" name="">
-							<span v-cloak v-show="error_pwd" class="error_tip">密码最少8位，最长20位</span>	
+							<span v-cloak v-show="error_pwd" class="error_tip"> 密码8-20位, 掰着手指数数对不对~</span>
                         </div>
                         <div class="form_group">
                             <label>确认新密码：</label>
                             <input v-model="new_cpwd" v-on:blur="check_cpwd" type="password" name="">
-							<span v-cloak v-show="error_cpwd" class="error_tip">两次密码不一致</span>	
+							<span v-cloak v-show="error_cpwd" class="error_tip">两次密码填写不一致,我也很为难啊~~~</span>
                         </div>
                         <input v-on:click="change_pwd" type="button" name="" value="确 定" class="info_submit">
                     </form>

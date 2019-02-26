@@ -7,6 +7,9 @@ html,body{height:100%}
 	border-bottom:1px solid #dddddd
 }
 
+.error_tip{
+	color:red;
+}
 .header{
 	width:1200px;
 	height:29px;
