@@ -361,7 +361,7 @@ HAYSTACK_CONNECTIONS = {
         # 指定所使用的搜索引擎
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
         # 指定es搜索引擎服务器地址
-        'URL': 'http://192.168.59.225:9200//',  # 此处为elasticsearch运行的服务器ip地址，端口号固定为9200
+        'URL': 'http://192.168.59.225:9200/',  # 此处为elasticsearch运行的服务器ip地址，端口号固定为9200
         # 指定elasticsearch建立的索引库的名称
         'INDEX_NAME': 'meiduo',  # 指定elasticsearch建立的索引库的名称
     },
