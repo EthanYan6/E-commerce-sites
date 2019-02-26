@@ -5,19 +5,27 @@
 	<title>闫氏商城-用户中心</title>
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="js/host.js"></script>
+	<script type="text/javascript" src="js/vue-2.5.16.js"></script>
+	<script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+	<script>
+		var user_id = sessionStorage.user_id || localStorage.user_id;
+		var token = sessionStorage.token || localStorage.token;
+		if (!(user_id && token)) {
+			location.href = '/login.html?next=/user_center_info.html';
+		}
+	</script>
 </head>
 <body>
+	<div id="app" >
 	<div class="header_con">
 		<div class="header">
 			<div class="welcome fl">欢迎来到闫氏商城!</div>
 			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
-				<div class="login_btn fl">
-					<a href="login.html">登录</a>
+				<div class="login_btn fl" v-cloak>
+					欢迎您：<em>{{ username }}</em>
 					<span>|</span>
-					<a href="register.html">注册</a>
+					<a v-on:click="logout">退出</a>
 				</div>
 				<div class="user_link fl">
 					<span>|</span>
@@ -34,10 +42,10 @@
 	<div class="search_bar clearfix">
 		<a href="index.html" class="logo fl"><img src="images/logo.png"></a>
 		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
-		<div class="search_con fr mt40">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
+		<form method="get" action="/search.html" class="search_con fr mt40">
+            <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+            <input type="submit" class="input_btn fr" name="" value="搜索">
+        </form>
 	</div>
 
 	<div class="main_con clearfix">
@@ -57,26 +65,26 @@
                     <form>
                         <div class="form_group">
                             <label>当前密码：</label>
-                            <input type="password" name="">
+                            <input v-model="old_pwd" v-on:blur="check_opwd" type="password" name="">
+							<span v-cloak v-show="error_opwd" class="error_tip">请填写当前密码</span>	
                         </div>
                         <div class="form_group">
                             <label>新密码：</label>
-                            <input type="password" name="">
+							<input v-model="new_pwd" v-on:blur="check_pwd" type="password" name="">
+							<span v-cloak v-show="error_pwd" class="error_tip">密码最少8位，最长20位</span>	
                         </div>
                         <div class="form_group">
                             <label>确认新密码：</label>
-                            <input type="password" name="">
+                            <input v-model="new_cpwd" v-on:blur="check_cpwd" type="password" name="">
+							<span v-cloak v-show="error_cpwd" class="error_tip">两次密码不一致</span>	
                         </div>
-                        <input type="button" name="" value="确 定" class="info_submit">
+                        <input v-on:click="change_pwd" type="button" name="" value="确 定" class="info_submit">
                     </form>
-            </div>
 				</div>
-		
+			</div>
 		</div>
 		</div>
 	</div>
-
-
 
 	<div class="footer">
 		<div class="foot_link">
@@ -91,6 +99,7 @@
 		<p>CopyRight © 2016 北京闫氏集团 All Rights Reserved</p>
 		<p>电话：010-****888    京ICP备*******8号</p>
 	</div>
-	
+	</div>
+	<script type="text/javascript" src="js/user_center_pass.js"></script>
 </body>
 </html>
