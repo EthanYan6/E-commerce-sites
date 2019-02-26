@@ -5,21 +5,27 @@
 	<title>闫氏商城-商品评价</title>
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="js/host.js"></script>
 	<script type="text/javascript" src="js/vue-2.5.16.js"></script>
+	<script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+	<script>
+		var user_id = sessionStorage.user_id || localStorage.user_id;
+		var token = sessionStorage.token || localStorage.token;
+		if (!(user_id && token)) {
+			location.href = '/login.html?next=/user_center_info.html';
+		}
+	</script>
 </head>
 <body>
-	<div id="app" v-cloak>
+	<div id="app">
 	<div class="header_con">
 		<div class="header">
 			<div class="welcome fl">欢迎来到闫氏商城!</div>
 			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
 				<div class="login_btn fl">
-					<a href="login.html">登录</a>
+					欢迎您：<em>{{ username }}</em>
 					<span>|</span>
-					<a href="register.html">注册</a>
+					<a @click="logout">退出</a>
 				</div>
 				<div class="user_link fl">
 					<span>|</span>
@@ -42,13 +48,13 @@
 		</div>		
 	</div>
 
-	<div class="judge_con">
+	<div class="judge_con" v-for="(sku,index) in skus">
         <div class="judge_goods fl">     
             <ul>
                 <li>
-                    <a href="#"><img src="images/goods/goods001.jpg"></a>
-                    <h4><a href="#">360手机 N6 Pro 全网通 6GB+128GB 极夜黑</a></h4>
-                    <div class="prize">￥3.90</div>
+                    <a :href="sku.url"><img :src="sku.sku.default_image_url"></a>
+                    <h4><a :href="sku.url">{{ sku.sku.name }}</a></h4>
+                    <div class="prize">￥{{ sku.price }}</div>
                 </li>
             </ul> 
         </div>
@@ -56,25 +62,25 @@
             <div class="judge_item">
                 <label>商品满意度</label>
                 <div class="stars fl">
-                    <a @mouseover="on_stars_mouseover(1)" @mouseout="on_stars_mouseout()" @click="on_stars_click(1)" class="star_off" :class="score>=1?'light':''"></a>
-					<a @mouseover="on_stars_mouseover(2)" @mouseout="on_stars_mouseout()" @click="on_stars_click(2)" class="star_off" :class="score>=2?'light':''"></a>
-					<a @mouseover="on_stars_mouseover(3)" @mouseout="on_stars_mouseout()" @click="on_stars_click(3)" class="star_off" :class="score>=3?'light':''"></a>
-					<a @mouseover="on_stars_mouseover(4)" @mouseout="on_stars_mouseout()" @click="on_stars_click(4)" class="star_off" :class="score>=4?'light':''"></a>
-					<a @mouseover="on_stars_mouseover(5)" @mouseout="on_stars_mouseout()" @click="on_stars_click(5)" class="star_off" :class="score>=5?'light':''"></a>
+                    <a @mouseover="on_stars_mouseover(index, 1)" @mouseout="on_stars_mouseout(index)" @click="on_stars_click(index, 1)" class="star_off" :class="sku.score>=1?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(index, 2)" @mouseout="on_stars_mouseout(index)" @click="on_stars_click(index, 2)" class="star_off" :class="sku.score>=2?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(index, 3)" @mouseout="on_stars_mouseout(index)" @click="on_stars_click(index, 3)" class="star_off" :class="sku.score>=3?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(index, 4)" @mouseout="on_stars_mouseout(index)" @click="on_stars_click(index, 4)" class="star_off" :class="sku.score>=4?'light':''"></a>
+					<a @mouseover="on_stars_mouseover(index, 5)" @mouseout="on_stars_mouseout(index)" @click="on_stars_click(index, 5)" class="star_off" :class="sku.score>=5?'light':''"></a>
                 </div>
-				<div class="score">{{display_score}}分</div>
+                <div class="score">{{sku.display_score}}分</div>
             </div>
             <div class="judge_item">
                 <label>发表评价</label>
-                <textarea class="judge_area"></textarea>
+                <textarea class="judge_area" v-model="sku.comment"></textarea>
             </div>
             <div class="judge_item">
-                <input type="input" value="提 交" class="judge_sub">
-                <input type="checkbox" class="no_name"> 匿名评价
+                <input type="input" @click="save_comment(index)" value="提 交" class="judge_sub">
+                <input type="checkbox" v-model="sku.is_anonymous" class="no_name"> 匿名评价
             </div>
         </div>
     </div>
-	
+
 
 	<div class="footer">
 		<div class="foot_link">
