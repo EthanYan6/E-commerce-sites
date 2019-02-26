@@ -95,6 +95,23 @@ var vm = new Vue({
                 .catch(error => {
                     console.log(error.response.data);
                 })
+        },
+        // 微博登录
+        weibo_login: function(){
+            var next = this.get_query_string('next') || '/';
+            axios.get(this.host + '/oauth/weibo/authorization/?next=' + next, {
+                    responseType: 'json',
+                    withCredentials: true
+                })
+                .then(response => {
+                    location.href = response.data.login_url;
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                })
         }
-    }
+
+
+    },
+
 });

@@ -374,3 +374,10 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 ALIPAY_APPID = "2016092600602671" # 开发应用appid
 ALIPAY_URL = "https://openapi.alipaydev.com/gateway.do" # 支付宝网关地址
 ALIPAY_DEBUG = True # 是否使用沙箱环境
+
+# settins.dev.py
+
+# 微博登录的参数
+WEIBO_CLIENT_ID = '3305669385'
+WEIBO_CLIENT_SECRET = '74c7bea69d5fc64f5c3b80c802325276'
+WEIBO_REDIRECT_URI = 'http://www.meiduo.site:8080/sina_callback.html'

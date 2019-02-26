@@ -1,12 +1,131 @@
 import base64
 import os
 
+import re
+
+from django.conf import settings
 from django_redis import get_redis_connection
 from rest_framework import serializers
-
-from oauth.models import OAuthQQUser
+from itsdangerous import TimedJSONWebSignatureSerializer as TJWSSerializer
+from oauth.models import OAuthQQUser, OAuthSinaUser
 from oauth.utils import OAuthQQ
 from users.models import User
+
+
+# oauth/serializers.py
+from verifications.views import SMSCodeView
+
+
+class WeiboOauthSerializers(serializers.ModelSerializer):
+    """微博验证序列化器"""
+
+    # 指名模型类中没有的字段
+    mobile = serializers.CharField(max_length=11)
+    sms_code = serializers.CharField(max_length=6, min_length=6, write_only=True)
+    access_token = serializers.CharField(write_only=True)  # 反序列化输入
+
+    token = serializers.CharField(read_only=True)
+    user_id = serializers.IntegerField(read_only=True)  # 序列化输出
+
+    class Meta:
+        model = User
+        fields = ('password', 'mobile', 'username', 'sms_code', 'token', 'access_token', 'user_id')
+
+        extra_kwargs = {
+            'username': {
+                'read_only': True
+            },
+            'password': {
+                'write_only': True
+            }
+        }
+
+    def validated_mobile(self, value):
+        """
+        验证手机号
+        :param value:
+        :return:
+        """
+        if not re.match(r"1[3-9]\d{9}$", value):
+            raise serializers.ValidationError("手机号格式错误")
+        return value
+
+    def validate(self, attrs):
+        """
+        验证access_token
+        :param attrs:
+        :return:
+        """
+        tjs = TJWSSerializer(settings.SECRET_KEY, 300)
+        try:
+            data = tjs.loads(attrs["access_token"])  # 解析token
+        except:
+            raise serializers.ValidationError("无效的token")
+
+        # 获取weibotoken
+        weibotoken = data.get("weibotoken")
+        # attrs中添加weibotoken
+        attrs["weibotoken"] = weibotoken
+        # 短信验证码是否正确
+        mobile = attrs['mobile']
+
+        # 从redis中获取真是的短信验证码
+        redis_conn = get_redis_connection('verify_codes')
+        real_sms_code = redis_conn.get('sms_%s' % mobile)  # bytes
+        if real_sms_code is None:
+            raise serializers.ValidationError('短信验证码已经失效')
+        # 对比短信验证码
+        sms_code = attrs['sms_code']  # str
+        if real_sms_code.decode() != sms_code:
+            raise serializers.ValidationError('短信验证码填写错误')
+        # 如果手机号已经注册，需要校验密码是否正确
+        try:
+            user = User.objects.get(mobile=mobile)
+        except User.DoesNotExist:
+            # 手机号没注册
+            user = None
+        else:
+            # 手机号已经注册
+            password = attrs['password']
+            if not user.check_password(password):
+                raise serializers.ValidationError('密码错误')
+        # 向attrs中添加User
+        attrs['user'] = user
+        return attrs
+
+
+    def create(self, validated_data):
+        """
+        保存用户
+        :param self:
+        :param validated_data:
+        :return:
+        """
+        # 判断用户
+        user = validated_data.get('user', None)
+        if user is None:
+            # 创建用户
+            user = User.objects.create_user(username=validated_data['mobile'],
+                                            password=validated_data['password'],
+                                            mobile=validated_data['mobile'])
+        # 绑定操作
+        OAuthSinaUser.objects.create(user=user, weibotoken=validated_data["weibotoken"])
+        # user_id=user.id
+        from rest_framework_jwt.settings import api_settings
+        # 生成加密后的token数据
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+        payload = jwt_payload_handler(user)  # 生成载荷部分
+        token = jwt_encode_handler(payload)  # 生成token
+
+        # user添加token属性
+        user.token = token
+        user.user_id = user.id
+
+        return user
+
+
 
 
 class QQAuthUserSerializer(serializers.ModelSerializer):
