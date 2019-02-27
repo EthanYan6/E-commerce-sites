@@ -22,3 +22,9 @@ class SKUIndexSerializer(HaystackSerializer):
         # 指定索引列
         index_classes = [SKUIndex]
         fields = ('text','object')
+
+
+class UserCenterOrderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        pass

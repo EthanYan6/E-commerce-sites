@@ -4,10 +4,22 @@ from django.shortcuts import render
 # GET /categories/(?P<category_id>\d+)/skus/
 from drf_haystack.viewsets import HaystackViewSet
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
+from rest_framework.views import APIView
+
 from goods.models import SKU
 from goods.serializers import SKUSerializer, SKUIndexSerializer
+
+
+class UserCenterOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request):
+        pass
+
+
 
 
 # GET /skus/search/?text=<搜索关键字>
