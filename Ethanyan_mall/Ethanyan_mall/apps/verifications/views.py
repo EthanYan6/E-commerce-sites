@@ -35,6 +35,29 @@ class SMSCodeView(APIView):
         3.使用云通讯给mobile发送短信
         4.返回应答，短信发送成功
         """
+        image_code = request.GET.get('text')
+        image_code_id = request.GET.get('image_code_id')
+        redis_image = get_redis_connection('image_codes')
+        if image_code and image_code_id:
+            try:
+                real_image_code = redis_image.get("ImageCode_" + image_code_id)
+                # 如果图片验证码取出成功,那么删除redis中的缓存.
+                if real_image_code:
+                    real_image_code = real_image_code.decode()
+                    redis_image.delete("ImageCode_" + image_code_id)
+            except Exception as e:
+                logger.info(e)
+                return Response({'message':'获取图片验证码失败'},status=status.HTTP_400_BAD_REQUEST)
+            # 判断图片验证码是否已经过期
+            if not real_image_code:
+                # 过期
+                return Response({'message':'图片验证码已过期'},status=status.HTTP_400_BAD_REQUEST)
+            # 进行图片验证码的校验
+            if image_code.lower() != real_image_code:
+                # 验证码输入有误
+                return Response({'message':'图片验证码输入有误'},status=status.HTTP_400_BAD_REQUEST)
+
+
 
         # 判断给<mobile>60s内是否发送过短信
         redis_conn = get_redis_connection('verify_codes')
