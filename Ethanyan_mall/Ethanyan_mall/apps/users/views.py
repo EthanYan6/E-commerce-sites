@@ -32,8 +32,22 @@ from cart.utils import merge_cookie_cart_to_redis
 
 # API: GET /accounts/(?P<username>\w+)/password/token/
 class FindPasswdThirdView(APIView):
-    def get(self,request):
-        pass
+    def get(self,request,username):
+        user = User.objects.get(username=username)
+        sms_code = request.GET.get('sms_code')
+        # 从redis中获取真是的短信验证码
+        redis_conn = get_redis_connection('verify_codes')
+        real_sms_code = redis_conn.get('sms_%s' % user.mobile)  # bytes
+        if real_sms_code is None:
+            return Response('短信验证码已经失效')
+        # 对比短信验证码
+          # str
+        if real_sms_code.decode() != sms_code:
+            return Response('短信验证码填写错误')
+        tjs = TJWSSerializer(settings.SECRET_KEY, 300)
+        token = tjs.dumps({'user_id': user.id}).decode()
+        return Response({'token':token,'user_id':user.id})
+
 
 # GET /sms_codes/
 class FindPasswdSecondView(APIView):
