@@ -29,6 +29,12 @@ logger = logging.getLogger('django')
 from cart.utils import merge_cookie_cart_to_redis
 # Create your views here.
 
+
+# API: GET /accounts/(?P<username>\w+)/password/token/
+class FindPasswdThirdView(APIView):
+    def get(self,request):
+        pass
+
 # GET /sms_codes/
 class FindPasswdSecondView(APIView):
     def get(self,request):
@@ -41,7 +47,7 @@ class FindPasswdSecondView(APIView):
             data = serializer.loads(access_token)
         except BadData:
             return None
-        mobile = data.get('mobile')
+        mobile = data.get('user')
         if mobile:
             # 判断给<mobile>60s内是否发送过短信
             redis_conn = get_redis_connection('verify_codes')
