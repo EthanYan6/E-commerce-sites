@@ -53,7 +53,7 @@ class SMSCodeView(APIView):
                 # 过期
                 return Response({'message':'图片验证码已过期'},status=status.HTTP_400_BAD_REQUEST)
             # 进行图片验证码的校验
-            if image_code.lower() != real_image_code:
+            if image_code.lower() != real_image_code.lower():
                 # 验证码输入有误
                 return Response({'message':'图片验证码输入有误'},status=status.HTTP_400_BAD_REQUEST)
 

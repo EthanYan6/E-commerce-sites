@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView,UpdateAPIView
@@ -15,13 +16,52 @@ from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin, UpdateMo
 from users.serializers import EmailSerializer
 from goods.models import SKU
 from goods.serializers import SKUSerializer
-
+from itsdangerous import TimedJSONWebSignatureSerializer as TJWSSerializer
 from datetime import datetime
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.views import ObtainJSONWebToken,jwt_response_payload_handler
 
 from cart.utils import merge_cookie_cart_to_redis
 # Create your views here.
+
+
+
+# GET /accounts/(?P<username>\w+)/sms/token/
+class FindPasswdOneView(APIView):
+
+    def get(self,request,username):
+
+        user = User.objects.get(username=username)
+
+        image_code = request.GET.get('text')
+        image_code_id = request.GET.get('image_code_id')
+        redis_image = get_redis_connection('image_codes')
+        try:
+            real_image_code = redis_image.get("ImageCode_" + image_code_id)
+            # 如果图片验证码取出成功,那么删除redis中的缓存.
+            if real_image_code:
+                real_image_code = real_image_code.decode()
+                redis_image.delete("ImageCode_" + image_code_id)
+        except Exception as e:
+
+            return Response({'message': '获取图片验证码失败'}, status=status.HTTP_400_BAD_REQUEST)
+        # 判断图片验证码是否已经过期
+        if not real_image_code:
+            # 过期
+            return Response({'message': '图片验证码已过期'}, status=status.HTTP_400_BAD_REQUEST)
+        # 进行图片验证码的校验
+        if image_code.lower() != real_image_code.lower():
+            # 验证码输入有误
+            return Response({'message': '图片验证码输入有误'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # 生成access_token进行返回
+        tjs = TJWSSerializer(settings.SECRET_KEY, 300)
+        access_token = tjs.dumps({'user': username}).decode()
+
+        # 做出响应.
+        return Response({'access_token': access_token,'mobile':user.mobile})
+
 
 
 # PUT /users/(?P<pk>\d+)/password/
