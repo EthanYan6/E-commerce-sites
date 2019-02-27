@@ -58,6 +58,9 @@ var vm = new Vue({
                         } 
                     )
                     .then(function(response){
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        location.href = '/login.html';
                         alert('保存成功');
                     })
                     .catch(function(error){

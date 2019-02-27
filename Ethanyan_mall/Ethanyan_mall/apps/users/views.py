@@ -1,3 +1,4 @@
+import json
 import random
 
 import logging
@@ -5,6 +6,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.urls import reverse
 from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView, GenericAPIView,RetrieveAPIView,UpdateAPIView
 from rest_framework.response import Response
@@ -45,8 +47,8 @@ class FindPasswdThirdView(APIView):
         if real_sms_code.decode() != sms_code:
             return Response('短信验证码填写错误')
         tjs = TJWSSerializer(settings.SECRET_KEY, 300)
-        token = tjs.dumps({'user_id': user.id}).decode()
-        return Response({'token':token,'user_id':user.id})
+        access_token = tjs.dumps({'user_id': user.id}).decode()
+        return Response({'access_token':access_token,'user_id':user.id})
 
 
 # GET /sms_codes/
@@ -130,7 +132,7 @@ class FindPasswdOneView(APIView):
             return Response({'message': '图片验证码输入有误'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-        # 生成access_token进行返回
+
         tjs = TJWSSerializer(settings.SECRET_KEY, 300)
         access_token = tjs.dumps({'user': user.mobile}).decode()
         per = user.mobile[0:3]
@@ -145,9 +147,32 @@ class FindPasswdOneView(APIView):
 
 # PUT /users/(?P<pk>\d+)/password/
 class UserPasswordChangeView(GenericAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = UserPasswordChangeSerializer
 
+
+    def post(self,request,pk):
+        user = User.objects.filter(id=pk).first()
+        json_str = request.body
+        json_str = json_str.decode()  # python3.6 无需执行此步
+        req_data = json.loads(json_str)
+        access_token = req_data.get('access_token')
+
+        sec = TJWSSerializer(settings.SECRET_KEY, 300)
+        try:
+            data = sec.loads(access_token)
+        except BadData:
+            return Response('非法请求')
+        user_id = data.get('user_id')
+
+
+        if user_id == int(pk):
+            # 判断两次密码是否一致
+            if req_data['password'] != req_data['password2']:
+                return Response('两次密码不一样，请仔细检查一下下...')
+            user.set_password(req_data['password'])
+            user.save()
+            return Response({'id':user_id,'username':user.username,'mobile':user.mobile})
+        return Response('非法请求')
     def put(self,request,pk):
         """
         1.获取参数并校验，看原密码是否正确，两次密码是否一致。
