@@ -20,8 +20,7 @@ class ImageCodeView(APIView):
         name, text, image = captcha.generate_captcha()
         redis_conn = get_redis_connection('image_codes')
         redis_conn.setex('ImageCode_' + image_code_id, constants.IMAGE_CODE_REDIS_EXPIRES, text)
-        response = HttpResponse(image,content_type='image/jpg')
-        return response
+        return HttpResponse(image,content_type='image/jpg')
 
 
 

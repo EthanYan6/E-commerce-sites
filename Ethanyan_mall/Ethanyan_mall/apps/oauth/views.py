@@ -44,8 +44,7 @@ class WeiboOauthView(APIView):
     def get(self, request):
         """
         第三方登录检查
-        oauth/sina/user/
-        ?code=0e67548e9e075577630cc983ff79fa6a
+        oauth/sina/user/?code=0e67548e9e075577630cc983ff79fa6a
         :param request:
         :return:
         """
