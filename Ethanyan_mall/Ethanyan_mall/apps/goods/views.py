@@ -44,10 +44,31 @@ class UserOrdersView(ListModelMixin,GenericViewSet):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
+            for ser in serializer.data:
+                create_time = ser.get('create_time')
+                from datetime import datetime, timedelta
+
+                # '2018-08-06T10:00:00.000000' 
+
+                date_ = datetime.strptime(create_time, "%Y-%m-%dT%H:%M:%S.%f")
+                new_date = "%d-%d-%d  %.02d:%02d:%02d" % (date_.year,date_.month,date_.day,date_.hour,date_.minute,date_.second)
+                ser['create_time']=new_date
+
+
             return self.get_paginated_response(serializer.data)
 
         # 创建序列化器类对象
         serializer = self.get_serializer(order, many=True)
+        for ser in serializer.data:
+            create_time = ser.get('create_time')
+            from datetime import datetime, timedelta
+
+            # '2018-08-06T10:00:00.000000' 
+
+            date_ = datetime.strptime(create_time, "%Y-%m-%dT%H:%M:%S.%f")
+            new_date = "%d-%d-%d  %.02d:%02d:%02d" % (
+            date_.year, date_.month, date_.day, date_.hour, date_.minute, date_.second)
+            ser['create_time'] = new_date
 
         data = {
             'count': len(order),
