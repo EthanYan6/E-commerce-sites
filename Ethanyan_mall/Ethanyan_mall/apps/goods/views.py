@@ -24,26 +24,29 @@ from goods.serializers import SKUSerializer, SKUIndexSerializer, OrderGoodsSeria
 from orders.models import OrderGoods, OrderInfo
 from users.models import User
 
-
+# 2019年２月２８日写
+# GET /orders/user/
 class UserOrdersView(ListModelMixin,GenericViewSet):
-
-
+    # 添加认证,登录用户才可以访问
     permission_classes = [IsAuthenticated]
-    # serializer_class = OrderSerializer
+    # 指定序列化器类
     serializer_class = OrderGoodsSerializer
 
+    # 重写list方法
     def list(self, request, *args, **kwargs):
+        # 获取登录用户
         user = request.user
-
+        # 查询订单数据,按创建时间进行降序排列
         order = OrderInfo.objects.filter(user_id=user.id).order_by("-create_time")
+
+        # 复制粘贴源代码中的分页功能代码
         queryset = self.filter_queryset(order)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        # skus = order.ordergoods_set.all()
-
+        # 创建序列化器类对象
         serializer = self.get_serializer(order, many=True)
 
         data = {
