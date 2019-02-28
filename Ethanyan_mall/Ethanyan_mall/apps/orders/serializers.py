@@ -8,10 +8,35 @@ from rest_framework import serializers
 from goods.models import SKU
 from orders.models import OrderGoods, OrderInfo
 
+
+
+class OrdersCommentCommitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderGoods
+        fields = ('order','comment','is_anonymous','score','sku','is_commented')
+        extra_kwargs = {
+            'order': {
+                'write_only': True,
+            },
+
+        }
+    def update(self, instance, validated_data):
+        instance.is_commented = True
+        instance.is_anonymous = validated_data['is_anonymous']
+        instance.score = validated_data['score']
+        instance.comment = validated_data['comment']
+        status = OrderInfo.ORDER_STATUS_ENUM['FINISHED']
+        OrderInfo.objects.filter(order_id=int(validated_data['order'].order_id)).update(status=status)
+
+        instance.save()
+        return instance
+
+
 class OrderSkuSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = SKU
-        fields = ('default_image_url','name','price')
+        fields = ('default_image_url','name','id')
 
 class OrderCommentSerializer(serializers.ModelSerializer):
     sku = OrderSkuSerializer()

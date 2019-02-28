@@ -8,13 +8,24 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from goods.models import SKU
 from orders.models import OrderInfo, OrderGoods
-from orders.serializers import OrderSKUSerializer,OrderSerializer, OrderCommentSerializer
+from orders.serializers import OrderSKUSerializer,OrderSerializer, OrderCommentSerializer, OrdersCommentCommitSerializer
 
 
 # Create your views here.
+# POST /orders/(?P<order_id>\d+)/comments/
+class OrdersCommentView(GenericAPIView):
+    serializer_class = OrdersCommentCommitSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request,order_id):
+        order = OrderGoods.objects.filter(order_id=order_id).first()
+        serialzier = self.get_serializer(order,data=request.data)
+        serialzier.is_valid(raise_exception=True)
+        serialzier.save()
+        return Response(serialzier.data)
 
 # GET /orders/(?P<order_id>\d+)/uncommentgoods/
-class OrdersCommentView(GenericAPIView):
+class OrdersUnCommentView(GenericAPIView):
     serializer_class = OrderCommentSerializer
     permission_classes = [IsAuthenticated]
 
