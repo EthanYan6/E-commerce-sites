@@ -35,6 +35,17 @@ from cart.utils import merge_cookie_cart_to_redis
 # API: GET /accounts/(?P<username>\w+)/password/token/
 class FindPasswdThirdView(APIView):
     def get(self,request,username):
+        """
+        1.用户收到短信并填写短信验证码；
+
+        2.发送请求到后端，带上 account 和 sms_code;
+
+        3.后端对参数进行校验；
+
+        4.生成用于修改密码的 token，将 user_id 保存进去，返回 user_id 和 token
+
+        """
+        # 获取用户以及手机验证码
         user = User.objects.get(username=username)
         sms_code = request.GET.get('sms_code')
         # 从redis中获取真是的短信验证码
@@ -43,9 +54,9 @@ class FindPasswdThirdView(APIView):
         if real_sms_code is None:
             return Response('短信验证码已经失效')
         # 对比短信验证码
-          # str
         if real_sms_code.decode() != sms_code:
             return Response('短信验证码填写错误')
+        # 生成用于修改密码的ｔｏｋｅｎ值．
         tjs = TJWSSerializer(settings.SECRET_KEY, 300)
         access_token = tjs.dumps({'user_id': user.id}).decode()
         return Response({'access_token':access_token,'user_id':user.id})
@@ -54,10 +65,20 @@ class FindPasswdThirdView(APIView):
 # GET /sms_codes/
 class FindPasswdSecondView(APIView):
     def get(self,request):
+        """
+        1.前端发送请求，带上上一步生成的 access_token；
 
+        2.在模型类中定义验证 token 的方法，使用 itdangerous 提供的方法进行反验证，取出存在token 中的手机号，进行判断是否在 60s 内，防止重复发送；
 
+        3.生成短信验证码，存入 redis，使用异步 celery 发送短信；
+
+        4.返回成功消息；
+
+        """
+        # 获取上一步的access_token
         access_token = request.GET.get('access_token')
 
+        # 对获取到的ｔｏｋｅｎ进行解密校验．并且获取手机号
         serializer = TJWSSerializer(settings.SECRET_KEY,300)
         try:
             data = serializer.loads(access_token)
@@ -107,7 +128,8 @@ class FindPasswdSecondView(APIView):
 class FindPasswdOneView(APIView):
 
     def get(self,request,username):
-
+        # 获取找回密码的用户
+        # 因为我们之前重写过Django的认证后端类，所以认证方法username既可以传账号，又可以传入手机号。
         user = User.objects.get(username=username)
 
         image_code = request.GET.get('text')
@@ -132,15 +154,17 @@ class FindPasswdOneView(APIView):
             return Response({'message': '图片验证码输入有误'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+        # 将手机号加密
         tjs = TJWSSerializer(settings.SECRET_KEY, 300)
         access_token = tjs.dumps({'user': user.mobile}).decode()
+
+        #　加密手机号
         per = user.mobile[0:3]
         back = user.mobile[-5:-1]
         sec = per + '****' + back
 
 
-        # 做出响应.
+        # 做出响应.返回ａｃｃｅｓｓ＿ｔｏｋｅｎ和手机号
         return Response({'access_token': access_token,'mobile':sec})
 
 
@@ -149,21 +173,30 @@ class FindPasswdOneView(APIView):
 class UserPasswordChangeView(GenericAPIView):
     serializer_class = UserPasswordChangeSerializer
 
-
     def post(self,request,pk):
+        """
+        1.在模型类中实现检验修改密码 token 的方法，取出 data，判断 user_id 是否一样；
+
+        2.判断两次密码是否一样，判断是否是当前用户，返回数据；
+
+        3.更新密码；
+
+        4.返回重置密码成功信息。
+
+        """
         user = User.objects.filter(id=pk).first()
         json_str = request.body
         json_str = json_str.decode()  # python3.6 无需执行此步
         req_data = json.loads(json_str)
         access_token = req_data.get('access_token')
 
+        # 对ｔｏｋｅｎ进行解密
         sec = TJWSSerializer(settings.SECRET_KEY, 300)
         try:
             data = sec.loads(access_token)
         except BadData:
             return Response('非法请求')
         user_id = data.get('user_id')
-
 
         if user_id == int(pk):
             # 判断两次密码是否一致
