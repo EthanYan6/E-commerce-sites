@@ -8,6 +8,18 @@ from rest_framework import serializers
 from goods.models import SKU
 from orders.models import OrderGoods, OrderInfo
 
+class OrderSkuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SKU
+        fields = ('default_image_url','name','price')
+
+class OrderCommentSerializer(serializers.ModelSerializer):
+    sku = OrderSkuSerializer()
+    class Meta:
+        model = OrderGoods
+        fields = ('count', 'sku', 'price')
+
+
 class OrderSKUSerializer(serializers.ModelSerializer):
     """订单结算商品的序列化器类"""
     count = serializers.IntegerField(label='结算商品数量')

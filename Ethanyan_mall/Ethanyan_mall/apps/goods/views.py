@@ -33,15 +33,6 @@ class UserOrdersView(ListModelMixin,GenericViewSet):
     serializer_class = OrderGoodsSerializer
 
     def list(self, request, *args, **kwargs):
-
-
-        '''
-        获取与用户相关的订单商品信息
-        1 先获取登录用户的相关的订单id
-        2，根据订单id去数据订单商品表获取相关的商品信息
-        3.返回与用户相关的商品信息给前端
-        '''
-        # 1 先获取登录用户的相关的订单id
         user = request.user
 
         order = OrderInfo.objects.filter(user_id=user.id).order_by("-create_time")
@@ -49,17 +40,12 @@ class UserOrdersView(ListModelMixin,GenericViewSet):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            
-
             return self.get_paginated_response(serializer.data)
-
 
         # skus = order.ordergoods_set.all()
 
         serializer = self.get_serializer(order, many=True)
 
-        # serializer.is_valid(raise_exception=True)
-        # 2，根据订单id去数据订单商品表获取相关的商品信息
         data = {
             'count': len(order),
             'results': serializer.data
