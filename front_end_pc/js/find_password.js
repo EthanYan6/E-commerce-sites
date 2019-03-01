@@ -223,6 +223,10 @@ var vm = new Vue({
                         this.step_class['step-3'] = false;
                         this.is_show_form_3 = false;
                         this.is_show_form_4 = true;
+                        sessionStorage.clear();
+                        localStorage.clear();
+                        location.href = '/login.html';
+                        alert('保存成功');
                     })
                     .catch(error => {
                         alert(error.response.data.message);
