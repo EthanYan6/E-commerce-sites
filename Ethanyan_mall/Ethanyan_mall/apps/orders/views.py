@@ -11,6 +11,30 @@ from orders.models import OrderInfo, OrderGoods
 from orders.serializers import OrderSKUSerializer,OrderSerializer, OrderCommentSerializer, OrdersCommentCommitSerializer
 
 
+class OrdersCommentSkuView(APIView):
+    """
+    商品详情页中查看评论信息
+    1.通过url地址获取商品的id。
+
+    2.通过id获取到商品的评论相关信息。
+
+    3.将信息序列化并返回。
+    """
+
+
+    def get(self,request,pk):
+        skus = OrderGoods.objects.filter(sku_id=pk)
+        data = []
+        for sku in skus:
+            user = sku.order.user
+
+            dict = {'username':user.username,"comment":sku.comment,"score":sku.score}
+            data.append(dict)
+
+        return Response(data)
+
+
+
 # Create your views here.
 # POST /orders/(?P<order_id>\d+)/comments/
 class OrdersCommentView(GenericAPIView):
