@@ -1,7 +1,26 @@
 # E-commerce-sites
 ## explain
 This is a classic Django project with a split front and back.Many e-commerce sites are similar, and you can practice python and Django.
-## directory structure
+
+## 介绍
+1.1 项目简介
+
+美多商城项目是一个B2C模式的电商网站，采用前后端分离的开发模式，前端采用vue框架，后端采用DRF框架。
+
+1.2 项目功能模块
+
+项目功能模块加载中...
+
+![项目功能模块](https://github.com/EthanYan6/pic/raw/master/%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97.png)
+
+1.3 项目技术点
+
+项目技术点加载中...
+
+![项目技术点](https://github.com/EthanYan6/pic/raw/master/%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E7%82%B9.png)
+
+
+## 目录结构
 E-commerce-sites<br>
 ├── Ethanyan_mall<br>
 │   ├── celery_tasks<br>
@@ -22,3 +41,9 @@ E-commerce-sites<br>
 ├── LICENSE<br>
 ├── note<br>
 └── README.md<br>
+
+## 部署架构
+
+架构图正在加载中...
+
+![架构图](https://github.com/EthanYan6/pic/raw/master/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E6%9E%B6%E6%9E%84.png)
